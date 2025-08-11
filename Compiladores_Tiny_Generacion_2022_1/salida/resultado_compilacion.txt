@@ -854,3 +854,5 @@ Variable: i -> Direccion: 11
 
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+Generando código objeto en archivo: ejemplo_generado/programa_extendido.tm
+Archivo ejemplo_generado/programa_extendido.tm generado exitosamente.
