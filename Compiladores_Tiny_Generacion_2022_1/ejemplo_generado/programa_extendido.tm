@@ -35,77 +35,78 @@
 23:     LDC       0,0(0)        array: inicializar elemento 9 a cero
 24:     ST        0,10(5)       array: almacenar en posicion 10
 * <- declaracion
+* registrada funcion: suma_vector
 * -> declaracion: i
 * Declaracion de variable: i (local)
 25:     LDC       0,0(0)        local: inicializar variable i a cero
-26:     ST        0,11(5)       local: almacenar en direccion 11
+26:     ST        0,14(5)       local: almacenar en direccion 14
 * <- declaracion
 * -> declaracion: num
 * Declaracion de variable: num (local)
 27:     LDC       0,0(0)        local: inicializar variable num a cero
-28:     ST        0,12(5)       local: almacenar en direccion 12
+28:     ST        0,16(5)       local: almacenar en direccion 16
 * <- declaracion
 * -> declaracion: resultado
 * Declaracion de variable: resultado (local)
 29:     LDC       0,0(0)        local: inicializar variable resultado a cero
-30:     ST        0,13(5)       local: almacenar en direccion 13
+30:     ST        0,17(5)       local: almacenar en direccion 17
 * <- declaracion
 * -> leer
 31:     IN        0,0,0         leer: lee un valor entero 
-32:     ST        0,12(5)       leer: almaceno el valor entero leido en el id num
+32:     ST        0,16(5)       leer: almaceno el valor entero leido en el id num
 * <- leer
 * -> for
 * -> constante
 33:     LDC       0,0(0)        cargar constante: 0
 * <- constante
-34:     ST        0,11(5)       for: inicializar variable i
+34:     ST        0,14(5)       for: inicializar variable i
 * for: inicio del bucle
-35:     LD        0,11(5)       for: cargar variable de control
-36:     ST        0,-1(6)       for: guardar variable en pila temp
+35:     LD        0,14(5)       for: cargar variable de control
+36:     ST        0,0(6)        for: guardar variable en pila temp
 * -> constante
 37:     LDC       0,9(0)        cargar constante: 9
 * <- constante
-38:     LD        1,-1(6)       for: cargar variable de pila temp
+38:     LD        1,0(6)        for: cargar variable de pila temp
 39:     SUB       0,1,0         for: variable - valor_final
 * for: salto condicional al final
 * -> asignacion
 * -> Operacion: mas
 * -> Operacion: por
 * -> identificador
-41:     LD        0,11(5)       cargar id: val[i]
+41:     LD        0,14(5)       cargar id: val[i]
 * <- identificador
-42:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+42:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 43:     LDC       0,2(0)        cargar constante: 2
 * <- constante
-44:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+44:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 45:     MUL       0,1,0         op: *
 * <- Operacion: por
-46:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+46:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 47:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-48:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+48:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 49:     ADD       0,1,0         op: +
 * <- Operacion: mas
-50:     ST        0,-1(6)       asignacion array: guardar valor
+50:     ST        0,0(6)        asignacion array: guardar valor
 * -> identificador
-51:     LD        0,11(5)       cargar id: val[i]
+51:     LD        0,14(5)       cargar id: val[i]
 * <- identificador
 52:     LDC       1,1(0)        asignacion array: cargar direccion base
 53:     ADD       0,0,1         asignacion array: calcular direccion
-54:     LD        1,-1(6)       asignacion array: recuperar valor
+54:     LD        1,0(6)        asignacion array: recuperar valor
 55:     ST        1,0(0)        asignacion array: almacenar en posicion calculada
 * <- asignacion
 * for: punto de continue
-56:     LD        0,11(5)       for: cargar variable para incremento
-57:     ST        0,-1(6)       for: guardar variable en pila temp
+56:     LD        0,14(5)       for: cargar variable para incremento
+57:     ST        0,0(6)        for: guardar variable en pila temp
 * -> constante
 58:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-59:     LD        1,-1(6)       for: cargar variable de pila temp
+59:     LD        1,0(6)        for: cargar variable de pila temp
 60:     ADD       0,1,0         for: incrementar variable
-61:     ST        0,11(5)       for: guardar variable incrementada
+61:     ST        0,14(5)       for: guardar variable incrementada
 62:     LDA       7,-28(7)      for: salto al inicio
 * for: fin del bucle
 40:     JGT       0,22(7)       for: saltar si variable > final
@@ -114,36 +115,36 @@
 * -> Operacion: and
 * -> Operacion: mayorigual
 * -> identificador
-63:     LD        0,12(5)       cargar id: val[num]
+63:     LD        0,16(5)       cargar id: val[num]
 * <- identificador
-64:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+64:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 65:     LDC       0,0(0)        cargar constante: 0
 * <- constante
-66:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+66:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 67:     SUB       0,1,0         op: >=
 68:     JGE       0,2(7)        saltar si AC>=0
 69:     LDC       0,0(0)        caso falso
 70:     LDA       7,1(7)        saltar caso verdadero
 71:     LDC       0,1(0)        caso verdadero
 * <- Operacion: mayorigual
-72:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+72:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> Operacion: menorigual
 * -> identificador
-73:     LD        0,12(5)       cargar id: val[num]
+73:     LD        0,16(5)       cargar id: val[num]
 * <- identificador
-74:     ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
+74:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 75:     LDC       0,10(0)       cargar constante: 10
 * <- constante
-76:     LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+76:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
 77:     SUB       0,1,0         op: <=
 78:     JLE       0,2(7)        saltar si AC<=0
 79:     LDC       0,0(0)        caso falso
 80:     LDA       7,1(7)        saltar caso verdadero
 81:     LDC       0,1(0)        caso verdadero
 * <- Operacion: menorigual
-82:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+82:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 83:     JEQ       1,3(7)        and: si izquierdo es falso, resultado es falso
 84:     JEQ       0,2(7)        and: si derecho es falso, resultado es falso
 85:     LDC       0,1(0)        and: ambos verdaderos
@@ -153,7 +154,7 @@
 * If: el salto hacia el else debe estar aqui
 * -> escribir
 * -> identificador
-89:     LD        0,12(5)       cargar id: val[num]
+89:     LD        0,16(5)       cargar id: val[num]
 * <- identificador
 90:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
@@ -161,26 +162,26 @@
 * -> Operacion: igual
 * -> Operacion: modulo
 * -> identificador
-91:     LD        0,12(5)       cargar id: val[num]
+91:     LD        0,16(5)       cargar id: val[num]
 * <- identificador
-92:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+92:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 93:     LDC       0,2(0)        cargar constante: 2
 * <- constante
-94:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-95:     ST        0,-1(6)       mod: guardar b
-96:     ST        1,-2(6)       mod: guardar a
+94:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+95:     ST        0,0(6)        mod: guardar b
+96:     ST        1,-1(6)       mod: guardar a
 97:     DIV       0,1,0         mod: a/b
-98:     LD        1,-2(6)       mod: recuperar a
-99:     LD        2,-1(6)       mod: recuperar b en r2
+98:     LD        1,-1(6)       mod: recuperar a
+99:     LD        2,0(6)        mod: recuperar b en r2
 100:    MUL       0,0,2         mod: (a/b)*b
 101:    SUB       0,1,0         mod: a - (a/b)*b
 * <- Operacion: modulo
-102:    ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+102:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 103:    LDC       0,0(0)        cargar constante: 0
 * <- constante
-104:    LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+104:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 105:    SUB       0,1,0         op: ==
 106:    JEQ       0,2(7)        voy dos instrucciones mas alla if verdadero (AC==0)
 107:    LDC       0,0(0)        caso de falso (AC=0)
@@ -207,34 +208,34 @@
 * -> asignacion
 * -> Operacion: potencia
 * -> identificador
-116:    LD        0,12(5)       cargar id: val[num]
+116:    LD        0,16(5)       cargar id: val[num]
 * <- identificador
-117:    ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+117:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
 118:    LDC       0,2(0)        cargar constante: 2
 * <- constante
-119:    LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-120:    ST        0,-1(6)       pow: guardar exp
-121:    ST        1,-2(6)       pow: guardar base
+119:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+120:    ST        0,0(6)        pow: guardar exp
+121:    ST        1,-1(6)       pow: guardar base
 122:    LDC       0,1(0)        pow: inicializar resultado = 1
-123:    ST        0,-3(6)       pow: guardar res
+123:    ST        0,-2(6)       pow: guardar res
 * pow: inicio bucle
-124:    LD        0,-1(6)       pow: cargar exp
+124:    LD        0,0(6)        pow: cargar exp
 * pow: salto condicional a fin (exp==0)
-126:    LD        0,-3(6)       pow: cargar res
-127:    LD        1,-2(6)       pow: cargar base
+126:    LD        0,-2(6)       pow: cargar res
+127:    LD        1,-1(6)       pow: cargar base
 128:    MUL       0,1,0         pow: res = res * base
-129:    ST        0,-3(6)       pow: guardar res
-130:    LD        1,-1(6)       pow: cargar exp en AC1
+129:    ST        0,-2(6)       pow: guardar res
+130:    LD        1,0(6)        pow: cargar exp en AC1
 131:    LDC       0,1(0)        pow: cargar 1
 132:    SUB       0,1,0         pow: exp - 1
-133:    ST        0,-1(6)       pow: guardar exp
+133:    ST        0,0(6)        pow: guardar exp
 134:    LDA       7,-11(7)      pow: repetir
 125:    JEQ       0,9(7)        pow: salir si exp == 0
-135:    LD        0,-3(6)       pow: cargar resultado
-136:    LD        1,-3(6)       pow: pop res
-137:    LD        1,-2(6)       pow: pop base
-138:    LD        1,-1(6)       pow: pop exp
+135:    LD        0,-2(6)       pow: cargar resultado
+136:    LD        1,-2(6)       pow: pop res
+137:    LD        1,-1(6)       pow: pop base
+138:    LD        1,0(6)        pow: pop exp
 * <- Operacion: potencia
 139:    ST        0,0(5)        asignacion: almaceno el valor para el id x
 * <- asignacion
@@ -257,237 +258,243 @@
 * -> asignacion
 * -> llamada funcion: suma_vector
 * Procesando argumentos de la llamada
-* -> identificador
-145:    LD        0,1(5)        cargar id: val[arr]
-* <- identificador
+145:    LDC       0,1(0)        call: base addr de array arr
+146:    ST        0,0(6)        call: guardar argumento
 * -> constante
-146:    LDC       0,10(0)       cargar constante: 10
+147:    LDC       0,10(0)       cargar constante: 10
 * <- constante
-147:    ST        0,-1(6)       call: guardar argumento
-* -> constante
-148:    LDC       0,10(0)       cargar constante: 10
-* <- constante
-149:    ST        0,-2(6)       call: guardar argumento
-150:    LDA       0,3(7)        call: calcular return addr (PC+3)
-151:    ST        0,-3(6)       call: push return addr
-152:    LDA       7,0(7)        call: salto a funcion suma_vector
-* <- llamada funcion
-153:    ST        0,13(5)       asignacion: almaceno el valor para el id resultado
-* <- asignacion
-* -> escribir
-* -> identificador
-154:    LD        0,13(5)       cargar id: val[resultado]
-* <- identificador
-155:    OUT       0,0,0         escribir: genero la salida de la expresion
-* <- escribir
-* -> if
-* -> Operacion: or
-* -> Operacion: mayor
-* -> identificador
-156:    LD        0,12(5)       cargar id: val[num]
-* <- identificador
-157:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
-* -> constante
-158:    LDC       0,5(0)        cargar constante: 5
-* <- constante
-159:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-160:    SUB       0,1,0         op: >
-161:    JGT       0,2(7)        saltar si AC>0
-162:    LDC       0,0(0)        caso falso
-163:    LDA       7,1(7)        saltar caso verdadero
-164:    LDC       0,1(0)        caso verdadero
-* <- Operacion: mayor
-165:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
-* -> Operacion: menor
-* -> identificador
-166:    LD        0,12(5)       cargar id: val[num]
-* <- identificador
-167:    ST        0,-3(6)       op: push en la pila tmp el resultado expresion izquierda
-* -> constante
-168:    LDC       0,0(0)        cargar constante: 0
-* <- constante
-169:    LD        1,-3(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-170:    SUB       0,1,0         op: <
-171:    JLT       0,2(7)        voy dos instrucciones mas alla if verdadero (AC<0)
-172:    LDC       0,0(0)        caso de falso (AC=0)
-173:    LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
-174:    LDC       0,1(0)        caso de verdadero (AC=1)
-* <- Operacion: menor
-175:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-176:    JNE       1,3(7)        or: si izquierdo es verdadero, resultado es verdadero
-177:    JNE       0,2(7)        or: si derecho es verdadero, resultado es verdadero
-178:    LDC       0,0(0)        or: ambos falsos
-179:    LDA       7,1(7)        or: saltar caso verdadero
-180:    LDC       0,1(0)        or: resultado verdadero
-* <- Operacion: or
-* If: el salto hacia el else debe estar aqui
-* -> escribir
-* -> constante
-182:    LDC       0,1(0)        cargar constante: 1
-* <- constante
-183:    OUT       0,0,0         escribir: genero la salida de la expresion
-* <- escribir
-* If: el salto hacia el final debe estar aqui
-181:    JEQ       0,3(7)        if: jmp hacia else
-* <- if
-* -> if
-* -> Operacion: not
-* -> Operacion: diferente
-* -> identificador
-185:    LD        0,12(5)       cargar id: val[num]
-* <- identificador
-186:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
-* -> constante
-187:    LDC       0,5(0)        cargar constante: 5
-* <- constante
-188:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-189:    SUB       0,1,0         op: !=
-190:    JNE       0,2(7)        saltar si AC!=0
-191:    LDC       0,0(0)        caso falso
-192:    LDA       7,1(7)        saltar caso verdadero
-193:    LDC       0,1(0)        caso verdadero
-* <- Operacion: diferente
-194:    JEQ       0,2(7)        not: saltar si es cero (falso)
-195:    LDC       0,0(0)        not: resultado falso
-196:    LDA       7,1(7)        not: saltar carga de verdadero
-197:    LDC       0,1(0)        not: resultado verdadero
-* <- Operacion: not
-* If: el salto hacia el else debe estar aqui
-* -> escribir
-* -> constante
-199:    LDC       0,5(0)        cargar constante: 5
-* <- constante
-200:    OUT       0,0,0         escribir: genero la salida de la expresion
-* <- escribir
-* If: el salto hacia el final debe estar aqui
-198:    JEQ       0,3(7)        if: jmp hacia else
-* <- if
+148:    ST        0,-1(6)       call: guardar argumento
+149:    LDA       0,3(7)        call: calcular return addr (PC+3)
+150:    ST        0,-2(6)       call: push return addr
+152:    LD        1,-2(6)       prologo: cargar RA de -(numArgs)(MP)
+153:    ST        1,0(6)        prologo: colocar RA en 0(MP)
+154:    LD        0,0(6)        prologo: cargar arg v
+155:    ST        0,12(5)       prologo: guardar param v
+156:    LD        0,-1(6)       prologo: cargar arg size
+157:    ST        0,13(5)       prologo: guardar param size
+* === INICIO FUNCION suma_vector ===
 * -> declaracion: i
 * Declaracion de variable: i (local)
-202:    LDC       0,0(0)        local: inicializar variable i a cero
-203:    ST        0,11(5)       local: almacenar en direccion 11
+158:    LDC       0,0(0)        local: inicializar variable i a cero
+159:    ST        0,14(5)       local: almacenar en direccion 14
 * <- declaracion
 * -> declaracion: total
 * Declaracion de variable: total (local)
-204:    LDC       0,0(0)        local: inicializar variable total a cero
-205:    ST        0,14(5)       local: almacenar en direccion 14
+160:    LDC       0,0(0)        local: inicializar variable total a cero
+161:    ST        0,15(5)       local: almacenar en direccion 15
 * <- declaracion
 * -> asignacion
 * -> constante
-206:    LDC       0,0(0)        cargar constante: 0
+162:    LDC       0,0(0)        cargar constante: 0
 * <- constante
-207:    ST        0,14(5)       asignacion: almaceno el valor para el id total
+163:    ST        0,15(5)       asignacion: almaceno el valor para el id total
 * <- asignacion
 * -> for
 * -> constante
-208:    LDC       0,0(0)        cargar constante: 0
+164:    LDC       0,0(0)        cargar constante: 0
 * <- constante
-209:    ST        0,11(5)       for: inicializar variable i
+165:    ST        0,14(5)       for: inicializar variable i
 * for: inicio del bucle
-210:    LD        0,11(5)       for: cargar variable de control
-211:    ST        0,-2(6)       for: guardar variable en pila temp
+166:    LD        0,14(5)       for: cargar variable de control
+167:    ST        0,-3(6)       for: guardar variable en pila temp
 * -> Operacion: menos
 * -> identificador
-212:    LD        0,15(5)       cargar id: val[size]
+168:    LD        0,13(5)       cargar id: val[size]
 * <- identificador
-213:    ST        0,-3(6)       op: push en la pila tmp el resultado expresion izquierda
+169:    ST        0,-4(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-214:    LDC       0,1(0)        cargar constante: 1
+170:    LDC       0,1(0)        cargar constante: 1
 * <- constante
-215:    LD        1,-3(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-216:    SUB       0,1,0         op: -
+171:    LD        1,-4(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+172:    SUB       0,1,0         op: -
 * <- Operacion: menos
-217:    LD        1,-2(6)       for: cargar variable de pila temp
-218:    SUB       0,1,0         for: variable - valor_final
+173:    LD        1,-3(6)       for: cargar variable de pila temp
+174:    SUB       0,1,0         for: variable - valor_final
 * for: salto condicional al final
 * -> asignacion
 * -> Operacion: mas
 * -> identificador
-220:    LD        0,14(5)       cargar id: val[total]
+176:    LD        0,15(5)       cargar id: val[total]
 * <- identificador
-221:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
+177:    ST        0,-3(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
 * -> identificador
-222:    LD        0,11(5)       cargar id: val[i]
+178:    LD        0,14(5)       cargar id: val[i]
 * <- identificador
-223:    LDC       1,16(0)       identificador array: cargar direccion base
-224:    ADD       0,0,1         identificador array: calcular direccion
+179:    LD        1,12(5)       identificador array param: cargar direccion base
+180:    ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
-225:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-226:    ADD       0,1,0         op: +
+181:    LD        1,-3(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+182:    ADD       0,1,0         op: +
 * <- Operacion: mas
-227:    ST        0,14(5)       asignacion: almaceno el valor para el id total
+183:    ST        0,15(5)       asignacion: almaceno el valor para el id total
 * <- asignacion
 * -> if
 * -> Operacion: menor
 * -> identificador
 * -> identificador
-228:    LD        0,11(5)       cargar id: val[i]
+184:    LD        0,14(5)       cargar id: val[i]
 * <- identificador
-229:    LDC       1,16(0)       identificador array: cargar direccion base
-230:    ADD       0,0,1         identificador array: calcular direccion
+185:    LD        1,12(5)       identificador array param: cargar direccion base
+186:    ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
-231:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
+187:    ST        0,-3(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-232:    LDC       0,0(0)        cargar constante: 0
+188:    LDC       0,0(0)        cargar constante: 0
 * <- constante
-233:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-234:    SUB       0,1,0         op: <
-235:    JLT       0,2(7)        voy dos instrucciones mas alla if verdadero (AC<0)
-236:    LDC       0,0(0)        caso de falso (AC=0)
-237:    LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
-238:    LDC       0,1(0)        caso de verdadero (AC=1)
+189:    LD        1,-3(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+190:    SUB       0,1,0         op: <
+191:    JLT       0,2(7)        voy dos instrucciones mas alla if verdadero (AC<0)
+192:    LDC       0,0(0)        caso de falso (AC=0)
+193:    LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
+194:    LDC       0,1(0)        caso de verdadero (AC=1)
 * <- Operacion: menor
 * If: el salto hacia el else debe estar aqui
 * -> continue
 * continue: salto al incremento del bucle
 * <- continue
 * If: el salto hacia el final debe estar aqui
-239:    JEQ       0,1(7)        if: jmp hacia else
+195:    JEQ       0,1(7)        if: jmp hacia else
 * <- if
 * -> if
 * -> Operacion: mayor
 * -> identificador
-241:    LD        0,14(5)       cargar id: val[total]
+197:    LD        0,15(5)       cargar id: val[total]
 * <- identificador
-242:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
+198:    ST        0,-3(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-243:    LDC       0,200(0)      cargar constante: 200
+199:    LDC       0,200(0)      cargar constante: 200
 * <- constante
-244:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-245:    SUB       0,1,0         op: >
-246:    JGT       0,2(7)        saltar si AC>0
-247:    LDC       0,0(0)        caso falso
-248:    LDA       7,1(7)        saltar caso verdadero
-249:    LDC       0,1(0)        caso verdadero
+200:    LD        1,-3(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+201:    SUB       0,1,0         op: >
+202:    JGT       0,2(7)        saltar si AC>0
+203:    LDC       0,0(0)        caso falso
+204:    LDA       7,1(7)        saltar caso verdadero
+205:    LDC       0,1(0)        caso verdadero
 * <- Operacion: mayor
 * If: el salto hacia el else debe estar aqui
 * -> break
 * break: salto al final del bucle
 * <- break
 * If: el salto hacia el final debe estar aqui
-250:    JEQ       0,1(7)        if: jmp hacia else
+206:    JEQ       0,1(7)        if: jmp hacia else
 * <- if
 * for: punto de continue
-252:    LD        0,11(5)       for: cargar variable para incremento
-253:    ST        0,-2(6)       for: guardar variable en pila temp
+208:    LD        0,14(5)       for: cargar variable para incremento
+209:    ST        0,-3(6)       for: guardar variable en pila temp
 * -> constante
-254:    LDC       0,1(0)        cargar constante: 1
+210:    LDC       0,1(0)        cargar constante: 1
 * <- constante
-255:    LD        1,-2(6)       for: cargar variable de pila temp
-256:    ADD       0,1,0         for: incrementar variable
-257:    ST        0,11(5)       for: guardar variable incrementada
-258:    LDA       7,-49(7)      for: salto al inicio
+211:    LD        1,-3(6)       for: cargar variable de pila temp
+212:    ADD       0,1,0         for: incrementar variable
+213:    ST        0,14(5)       for: guardar variable incrementada
+214:    LDA       7,-49(7)      for: salto al inicio
 * for: fin del bucle
-219:    JGT       0,39(7)       for: saltar si variable > final
+175:    JGT       0,39(7)       for: saltar si variable > final
 * <- for
 * -> return
 * -> identificador
-259:    LD        0,14(5)       cargar id: val[total]
+215:    LD        0,15(5)       cargar id: val[total]
 * <- identificador
-260:    LD        1,0(6)        return: recuperar direccion de retorno
-261:    LDA       7,0(1)        return: salto a direccion de retorno
+216:    LD        1,0(6)        return: recuperar direccion de retorno
+217:    LDA       7,0(1)        return: salto a direccion de retorno
 * <- return
+* Return implicito de funcion
+218:    LD        1,0(6)        funcion: recuperar direccion de retorno
+219:    LDA       7,0(1)        funcion: retorno
+* === FIN FUNCION suma_vector ===
+151:    LDA       7,0(7)        call: salto a funcion suma_vector
+* <- llamada funcion
+220:    ST        0,17(5)       asignacion: almaceno el valor para el id resultado
+* <- asignacion
+* -> escribir
+* -> identificador
+221:    LD        0,17(5)       cargar id: val[resultado]
+* <- identificador
+222:    OUT       0,0,0         escribir: genero la salida de la expresion
+* <- escribir
+* -> if
+* -> Operacion: or
+* -> Operacion: mayor
+* -> identificador
+223:    LD        0,16(5)       cargar id: val[num]
+* <- identificador
+224:    ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+* -> constante
+225:    LDC       0,5(0)        cargar constante: 5
+* <- constante
+226:    LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+227:    SUB       0,1,0         op: >
+228:    JGT       0,2(7)        saltar si AC>0
+229:    LDC       0,0(0)        caso falso
+230:    LDA       7,1(7)        saltar caso verdadero
+231:    LDC       0,1(0)        caso verdadero
+* <- Operacion: mayor
+232:    ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+* -> Operacion: menor
+* -> identificador
+233:    LD        0,16(5)       cargar id: val[num]
+* <- identificador
+234:    ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
+* -> constante
+235:    LDC       0,0(0)        cargar constante: 0
+* <- constante
+236:    LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+237:    SUB       0,1,0         op: <
+238:    JLT       0,2(7)        voy dos instrucciones mas alla if verdadero (AC<0)
+239:    LDC       0,0(0)        caso de falso (AC=0)
+240:    LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
+241:    LDC       0,1(0)        caso de verdadero (AC=1)
+* <- Operacion: menor
+242:    LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+243:    JNE       1,3(7)        or: si izquierdo es verdadero, resultado es verdadero
+244:    JNE       0,2(7)        or: si derecho es verdadero, resultado es verdadero
+245:    LDC       0,0(0)        or: ambos falsos
+246:    LDA       7,1(7)        or: saltar caso verdadero
+247:    LDC       0,1(0)        or: resultado verdadero
+* <- Operacion: or
+* If: el salto hacia el else debe estar aqui
+* -> escribir
+* -> constante
+249:    LDC       0,1(0)        cargar constante: 1
+* <- constante
+250:    OUT       0,0,0         escribir: genero la salida de la expresion
+* <- escribir
+* If: el salto hacia el final debe estar aqui
+248:    JEQ       0,3(7)        if: jmp hacia else
+* <- if
+* -> if
+* -> Operacion: not
+* -> Operacion: diferente
+* -> identificador
+252:    LD        0,16(5)       cargar id: val[num]
+* <- identificador
+253:    ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+* -> constante
+254:    LDC       0,5(0)        cargar constante: 5
+* <- constante
+255:    LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+256:    SUB       0,1,0         op: !=
+257:    JNE       0,2(7)        saltar si AC!=0
+258:    LDC       0,0(0)        caso falso
+259:    LDA       7,1(7)        saltar caso verdadero
+260:    LDC       0,1(0)        caso verdadero
+* <- Operacion: diferente
+261:    JEQ       0,2(7)        not: saltar si es cero (falso)
+262:    LDC       0,0(0)        not: resultado falso
+263:    LDA       7,1(7)        not: saltar carga de verdadero
+264:    LDC       0,1(0)        not: resultado verdadero
+* <- Operacion: not
+* If: el salto hacia el else debe estar aqui
+* -> escribir
+* -> constante
+266:    LDC       0,5(0)        cargar constante: 5
+* <- constante
+267:    OUT       0,0,0         escribir: genero la salida de la expresion
+* <- escribir
+* If: el salto hacia el final debe estar aqui
+265:    JEQ       0,3(7)        if: jmp hacia else
+* <- if
 * <- programa
 * Fin de la ejecucion.
-262:    HALT      0,0,0         
+269:    HALT      0,0,0         

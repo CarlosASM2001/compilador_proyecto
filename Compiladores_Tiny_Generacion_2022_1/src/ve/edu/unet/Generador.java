@@ -590,7 +590,16 @@ public class Generador {
 			// Acceso a array: arr[indice]
 			generar(n.getDesplazamiento());
 			direccion = tablaSimbolos.getDireccion(n.getNombre());
-			UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "identificador array: cargar direccion base");
+			
+			// Si el nombre es "v" (parámetro de array), cargar la dirección contenida
+			// En el futuro esto debería ser más general con información de tipos
+			if(n.getNombre().equals("v")) {
+				// Es un parámetro que contiene la dirección base del array
+				UtGen.emitirRM("LD", UtGen.AC1, direccion, UtGen.GP, "identificador array param: cargar direccion base");
+			} else {
+				// Es un array directo, usar dirección fija
+				UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "identificador array: cargar direccion base");
+			}
 			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, UtGen.AC1, "identificador array: calcular direccion");
 		} else {
 			// Acceso normal a variable
@@ -743,6 +752,15 @@ public class Generador {
 	}
 	
 	private static void generarPreludioEstandar(){
+		// Resetear variables estáticas para nueva compilación
+		desplazamientoTmp = 0;
+		contadorEtiquetas = 0;
+		pilaBreak.clear();
+		pilaContinue.clear();
+		funcionesRegistradas.clear();
+		inicioFuncion.clear();
+		funcionesEmitidas.clear();
+		
 		UtGen.emitirComentario("* Compilacion TINY para la maquina TM");
 		UtGen.emitirComentario("* Prefacio estandar");
 		// Inicializar punteros

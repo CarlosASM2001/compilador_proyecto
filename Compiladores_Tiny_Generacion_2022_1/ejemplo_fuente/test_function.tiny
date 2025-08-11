@@ -1,0 +1,28 @@
+{Programa simple para probar funciones}
+
+global arr : array[3];
+
+begin
+    var i;
+    var result;
+    
+    // Inicializar array
+    arr[0] := 10;
+    arr[1] := 20;
+    arr[2] := 30;
+    
+    // Llamar función
+    result := call suma_simple(arr, 3);
+    write result
+end
+
+function suma_simple(v : array[], size)
+begin
+    var i;
+    var total;
+    total := 0;
+    for i := 0 to size - 1 step 1
+        total := total + v[i]
+    end;
+    return total
+end
