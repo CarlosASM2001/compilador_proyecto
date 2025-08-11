@@ -4,24 +4,6 @@
 global x;
 global arr : array[10];
 
-// Función que suma elementos de un vector
-function suma_vector(v : array[], size)
-begin
-    var i;
-    var total;
-    total := 0;
-    for i := 0 to size - 1 step 1
-        total := total + v[i];
-        if v[i] < 0 then
-            continue
-        end;
-        if total > 200 then
-            break
-        end
-    end;
-    return total
-end
-
 // Programa principal
 begin
     var i;
@@ -66,4 +48,22 @@ begin
     if !(num != 5) then
         write 5
     end
+end
+
+// Función que suma elementos de un vector
+function suma_vector(v : array[], size)
+begin
+    var i;
+    var total;
+    total := 0;
+    for i := 0 to size - 1 step 1
+        total := total + v[i];
+        if v[i] < 0 then
+            continue
+        end;
+        if total > 200 then
+            break
+        end
+    end;
+    return total
 end

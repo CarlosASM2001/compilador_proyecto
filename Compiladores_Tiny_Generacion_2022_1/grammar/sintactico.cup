@@ -141,6 +141,45 @@ program ::= declaration_seq:d main:m
            {: if(debug) System.out.println("\t regla programa solo main"); 
               ast = new NodoPrograma(null, m);
            :}
+         | declaration_seq:d main:m function_seq:f
+           {: if(debug) System.out.println("\t regla programa con funciones al final"); 
+              // Crear un programa con declaraciones y main, y agregar funciones al final
+              NodoPrograma programa = new NodoPrograma(d, m);
+              // Agregar las funciones como hermanas del main
+              if(m != null && f != null) {
+                  m.setHermanoDerecha(f);
+              }
+              ast = programa;
+           :}
+         | main:m function_seq:f
+           {: if(debug) System.out.println("\t regla programa main con funciones al final"); 
+              // Crear un programa solo con main y funciones
+              NodoPrograma programa = new NodoPrograma(null, m);
+              if(m != null && f != null) {
+                  m.setHermanoDerecha(f);
+              }
+              ast = programa;
+           :}
+;
+
+// Secuencia de funciones (al final del programa)
+function_seq ::= function_seq:seq function_declaration:func
+                {: if(debug) System.out.println("\t secuencia funciones"); 
+                   NodoBase current = seq;
+                   if(current != null){
+                       while(current.TieneHermano()){
+                           current = current.getHermanoDerecha();
+                       }
+                       current.setHermanoDerecha(func);
+                       RESULT = seq;
+                   } else {
+                       RESULT = func;
+                   }
+                :}
+              | function_declaration:func
+                {: if(debug) System.out.println("\t funcion unica"); 
+                   RESULT = func;
+                :}
 ;
 
 // Secuencia de declaraciones (globales y funciones)

@@ -149,9 +149,37 @@ public class Generador {
 			generar(n.getGlobal_block());
 		}
 		
-		// Registrar funciones (sin generar su cuerpo)
+		// Si hay funciones después del main, generar salto al main
+		boolean hayFunciones = (n.getFunction_block() != null) || tieneFuncionesAlFinal(n.getMain());
+		int saltoAlMain = -1;
+		
+		if(hayFunciones) {
+			// Generar salto que pase por encima de las funciones y vaya al main
+			saltoAlMain = UtGen.emitirSalto(0);
+			UtGen.emitirComentario("salto inicial al programa principal");
+		}
+		
+		// Registrar y generar funciones (antes del main si van al final)
 		if(n.getFunction_block() != null){
 			generar(n.getFunction_block());
+		}
+		
+		// Generar funciones que están después del main
+		if(n.getMain() != null && n.getMain().TieneHermano()) {
+			NodoBase hermano = n.getMain().getHermanoDerecha();
+			while(hermano != null) {
+				if(hermano instanceof NodoFuncion) {
+					generar(hermano);
+				}
+				hermano = hermano.getHermanoDerecha();
+			}
+		}
+		
+		// Completar el salto al main
+		if(hayFunciones) {
+			int direccionMain = UtGen.emitirSalto(0);
+			UtGen.cargarRespaldo(saltoAlMain);
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, direccionMain, "salto al programa principal");
 		}
 		
 		// Generar programa principal
@@ -160,6 +188,22 @@ public class Generador {
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- programa");
+	}
+	
+	// Método auxiliar para verificar si hay funciones después del main
+	private static boolean tieneFuncionesAlFinal(NodoBase main) {
+		if(main == null || !main.TieneHermano()) {
+			return false;
+		}
+		
+		NodoBase hermano = main.getHermanoDerecha();
+		while(hermano != null) {
+			if(hermano instanceof NodoFuncion) {
+				return true;
+			}
+			hermano = hermano.getHermanoDerecha();
+		}
+		return false;
 	}
 
 	private static void generarDeclaracion(NodoBase nodo){
