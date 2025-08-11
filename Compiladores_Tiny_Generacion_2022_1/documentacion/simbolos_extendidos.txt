@@ -1,0 +1,93 @@
+NUEVOS SÍMBOLOS TERMINALES PARA EL ARCHIVO SINTÁCTICO (CUP)
+================================================================
+
+/* PALABRAS RESERVADAS PARA FUNCIONES */
+terminal FUNCTION;
+terminal RETURN;
+terminal CALL;
+
+/* PALABRAS RESERVADAS PARA ÁMBITOS */
+terminal BEGIN;
+terminal VAR;
+terminal GLOBAL;
+
+/* PALABRAS RESERVADAS PARA VECTORES */
+terminal ARRAY;
+
+/* INSTRUCCIÓN ESPECIAL: FOR LOOP */
+terminal FOR;
+terminal TO;
+terminal STEP;
+terminal BREAK;
+terminal CONTINUE;
+
+/* NUEVOS OPERADORES RELACIONALES */
+terminal GT;        // >
+terminal LE;        // <=
+terminal GE;        // >=
+terminal NE;        // !=
+
+/* NUEVOS OPERADORES MATEMÁTICOS */
+terminal MOD;       // %
+terminal POW;       // **
+
+/* OPERADORES LÓGICOS */
+terminal AND;       // &&
+terminal OR;        // ||
+terminal NOT;       // !
+
+/* NUEVOS DELIMITADORES */
+terminal LBRACKET;  // [
+terminal RBRACKET;  // ]
+terminal LBRACE;    // {
+terminal RBRACE;    // }
+terminal COMMA;     // ,
+terminal COLON;     // :
+
+/* NUEVOS TIPOS DE DATOS */
+terminal String REAL;    // números decimales
+terminal String STRING;  // cadenas de texto
+
+PRECEDENCIA SUGERIDA (de menor a mayor):
+========================================
+precedence left OR;
+precedence left AND;
+precedence left EQ, NE;
+precedence left LT, LE, GT, GE;
+precedence left PLUS, MINUS;
+precedence left TIMES, OVER, MOD;
+precedence right POW;
+precedence right NOT;
+
+EJEMPLOS DE CÓDIGO QUE DEBE RECONOCER:
+=====================================
+
+1. Declaración de función:
+   function nombre(param1, param2) begin ... end
+
+2. Llamada de función:
+   call nombre(arg1, arg2)
+
+3. Declaración de vector:
+   var arr : array[10]
+
+4. Acceso a vector:
+   arr[i + 1]
+
+5. Bucle for:
+   for i := 0 to n step 1 begin ... end
+
+6. Variables globales:
+   global x
+
+7. Operadores relacionales:
+   x > y, x <= y, x >= y, x != y
+
+8. Operadores matemáticos:
+   x % y, x ** y
+
+9. Operadores lógicos:
+   (x > 0) && (y < 10), (a = 1) || (b = 2), !(x = 0)
+
+10. Control de flujo:
+    break, continue
