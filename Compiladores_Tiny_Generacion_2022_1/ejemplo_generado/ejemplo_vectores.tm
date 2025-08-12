@@ -4,33 +4,36 @@
 1:      LDC       6,1023(0)      init: MP = 1023 (tope de memoria)
 * * Fin del prefacio estandar
 * -> programa
+* -> declaracion: val
+* Declaracion de array: val tamaño definido
+* <- declaracion
 * -> declaracion: menor
 * Declaracion de variable: menor (local)
 2:      LDC       0,0(0)        local: inicializar variable menor a cero
-3:      ST        0,0(5)        local: almacenar en direccion 0
+3:      ST        0,5(5)        local: almacenar en direccion 5
 * <- declaracion
 * -> declaracion: suma
 * Declaracion de variable: suma (local)
 4:      LDC       0,0(0)        local: inicializar variable suma a cero
-5:      ST        0,1(5)        local: almacenar en direccion 1
+5:      ST        0,6(5)        local: almacenar en direccion 6
 * <- declaracion
 * -> declaracion: i
 * Declaracion de variable: i (local)
 6:      LDC       0,0(0)        local: inicializar variable i a cero
-7:      ST        0,2(5)        local: almacenar en direccion 2
+7:      ST        0,7(5)        local: almacenar en direccion 7
 * <- declaracion
 * -> asignacion
 * -> constante
 8:      LDC       0,0(0)        cargar constante: 0
 * <- constante
-9:      ST        0,2(5)        asignacion: almaceno el valor para el id i
+9:      ST        0,7(5)        asignacion: almaceno el valor para el id i
 * <- asignacion
 * -> repeat
 * repeat: el salto hacia el final (luego del cuerpo) del repeat debe estar aqui
 * -> asignacion
 * -> Operacion: mas
 * -> identificador
-10:     LD        0,2(5)        cargar id: val[i]
+10:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
 11:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
@@ -39,11 +42,11 @@
 13:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 14:     ADD       0,1,0         op: +
 * <- Operacion: mas
-15:     ST        0,2(5)        asignacion: almaceno el valor para el id i
+15:     ST        0,7(5)        asignacion: almaceno el valor para el id i
 * <- asignacion
 * -> Operacion: igual
 * -> identificador
-16:     LD        0,2(5)        cargar id: val[i]
+16:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
 17:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
@@ -67,7 +70,7 @@
 * -> constante
 26:     LDC       0,0(0)        cargar constante: 0
 * <- constante
-27:     LDC       1,3(0)        identificador array: cargar direccion base
+27:     LDC       1,0(0)        identificador array: cargar direccion base
 28:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 29:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
@@ -75,7 +78,7 @@
 * -> constante
 30:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-31:     LDC       1,3(0)        identificador array: cargar direccion base
+31:     LDC       1,0(0)        identificador array: cargar direccion base
 32:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 33:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
@@ -86,7 +89,7 @@
 * -> constante
 36:     LDC       0,2(0)        cargar constante: 2
 * <- constante
-37:     LDC       1,3(0)        identificador array: cargar direccion base
+37:     LDC       1,0(0)        identificador array: cargar direccion base
 38:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 39:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
@@ -97,7 +100,7 @@
 * -> constante
 42:     LDC       0,3(0)        cargar constante: 3
 * <- constante
-43:     LDC       1,3(0)        identificador array: cargar direccion base
+43:     LDC       1,0(0)        identificador array: cargar direccion base
 44:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 45:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
@@ -108,29 +111,29 @@
 * -> constante
 48:     LDC       0,4(0)        cargar constante: 4
 * <- constante
-49:     LDC       1,3(0)        identificador array: cargar direccion base
+49:     LDC       1,0(0)        identificador array: cargar direccion base
 50:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 51:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 52:     ADD       0,1,0         op: +
 * <- Operacion: mas
-53:     ST        0,1(5)        asignacion: almaceno el valor para el id suma
+53:     ST        0,6(5)        asignacion: almaceno el valor para el id suma
 * <- asignacion
 * -> asignacion
 * -> identificador
 * -> constante
 54:     LDC       0,0(0)        cargar constante: 0
 * <- constante
-55:     LDC       1,3(0)        identificador array: cargar direccion base
+55:     LDC       1,0(0)        identificador array: cargar direccion base
 56:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
-57:     ST        0,0(5)        asignacion: almaceno el valor para el id menor
+57:     ST        0,5(5)        asignacion: almaceno el valor para el id menor
 * <- asignacion
 * -> asignacion
 * -> constante
 58:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-59:     ST        0,2(5)        asignacion: almaceno el valor para el id i
+59:     ST        0,7(5)        asignacion: almaceno el valor para el id i
 * <- asignacion
 * -> repeat
 * repeat: el salto hacia el final (luego del cuerpo) del repeat debe estar aqui
@@ -138,14 +141,14 @@
 * -> Operacion: menor
 * -> identificador
 * -> identificador
-60:     LD        0,2(5)        cargar id: val[i]
+60:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
-61:     LDC       1,3(0)        identificador array: cargar direccion base
+61:     LDC       1,0(0)        identificador array: cargar direccion base
 62:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
 63:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-64:     LD        0,0(5)        cargar id: val[menor]
+64:     LD        0,5(5)        cargar id: val[menor]
 * <- identificador
 65:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 66:     SUB       0,1,0         op: <
@@ -158,12 +161,12 @@
 * -> asignacion
 * -> identificador
 * -> identificador
-72:     LD        0,2(5)        cargar id: val[i]
+72:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
-73:     LDC       1,3(0)        identificador array: cargar direccion base
+73:     LDC       1,0(0)        identificador array: cargar direccion base
 74:     ADD       0,0,1         identificador array: calcular direccion
 * <- identificador
-75:     ST        0,0(5)        asignacion: almaceno el valor para el id menor
+75:     ST        0,5(5)        asignacion: almaceno el valor para el id menor
 * <- asignacion
 * If: el salto hacia el final debe estar aqui
 71:     JEQ       0,5(7)        if: jmp hacia else
@@ -171,7 +174,7 @@
 * -> asignacion
 * -> Operacion: mas
 * -> identificador
-77:     LD        0,2(5)        cargar id: val[i]
+77:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
 78:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
@@ -180,11 +183,11 @@
 80:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
 81:     ADD       0,1,0         op: +
 * <- Operacion: mas
-82:     ST        0,2(5)        asignacion: almaceno el valor para el id i
+82:     ST        0,7(5)        asignacion: almaceno el valor para el id i
 * <- asignacion
 * -> Operacion: igual
 * -> identificador
-83:     LD        0,2(5)        cargar id: val[i]
+83:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
 84:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
@@ -201,13 +204,13 @@
 * <- repeat
 * -> escribir
 * -> identificador
-93:     LD        0,1(5)        cargar id: val[suma]
+93:     LD        0,6(5)        cargar id: val[suma]
 * <- identificador
 94:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> escribir
 * -> identificador
-95:     LD        0,0(5)        cargar id: val[menor]
+95:     LD        0,5(5)        cargar id: val[menor]
 * <- identificador
 96:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir

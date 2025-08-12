@@ -16,15 +16,9 @@ token END
 	 identificador
 	 write expresion
 	 sentencia unica
-token SEMI
+token END
 	 for con step
 	 sentencia unica
-token END
-Syntax error
-instead expected token classes are [error, IF, REPEAT, READ, WRITE, RETURN, CALL, VAR, FOR, BREAK, CONTINUE, ID]
-	 error en sentencia
-Error sintáctico en sentencia
-	 secuencia sentencias
 	 programa principal
 	 regla programa solo main
 

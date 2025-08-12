@@ -259,6 +259,10 @@ var_declaration ::= VAR ID:var SEMI
                    {: if(debug) System.out.println("\t declaracion variable local"); 
                       RESULT = new NodoDeclaracion(var.toString(), false);
                    :}
+                 | VAR ID:var COLON ARRAY LBRACKET NUM:size RBRACKET SEMI
+                   {: if(debug) System.out.println("\t declaracion variable local array"); 
+                      RESULT = new NodoDeclaracion(var.toString(), false, new NodoValor(Integer.parseInt(size)));
+                   :}
 ;
 
 // Secuencia de sentencias
