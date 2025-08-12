@@ -1,192 +1,40 @@
-{Ejemplo de operadores relacionales y matemáticos}
+{Ejemplo simple de operadores}
 
-// Variables globales para las pruebas
+global x;
+global y;
+global res;
 global a;
 global b;
-global resultado;
 
 begin
-    var x;
-    var y;
-    var z;
-    var condicion;
-    
-    // Inicialización de variables para las pruebas
-    a := 10;
-    b := 5;
-    x := 7;
-    y := 3;
-    
-    // ========== OPERADORES MATEMÁTICOS ==========
-    
-    // Ejemplo 1: Operaciones básicas (+, -, *, /)
-    write 1000; // Indicador de operadores básicos
-    resultado := a + b; // 15
-    write resultado;
-    
-    resultado := a - b; // 5
-    write resultado;
-    
-    resultado := a * b; // 50
-    write resultado;
-    
-    resultado := a / b; // 2
-    write resultado;
-    
-    // Ejemplo 2: Operador módulo (%)
-    write 2000; // Indicador de operador módulo
-    resultado := a % y; // 10 % 3 = 1
-    write resultado;
-    
-    resultado := 17 % 5; // 2
-    write resultado;
-    
-    resultado := b % 2; // 5 % 2 = 1
-    write resultado;
-    
-    // Ejemplo 3: Operador potenciación (**)
-    write 3000; // Indicador de operador potenciación
-    resultado := y ** 2; // 3^2 = 9
-    write resultado;
-    
-    resultado := 2 ** 4; // 2^4 = 16
-    write resultado;
-    
-    resultado := b ** y; // 5^3 = 125
-    write resultado;
-    
-    // Ejemplo 4: Combinación de operadores matemáticos
-    write 4000; // Indicador de operadores combinados
-    resultado := (a + b) * y; // (10 + 5) * 3 = 45
-    write resultado;
-    
-    resultado := a ** 2 + b * y; // 10^2 + 5*3 = 100 + 15 = 115
-    write resultado;
-    
-    resultado := (a - b) ** 2 % x; // (10-5)^2 % 7 = 25 % 7 = 4
-    write resultado;
-    
-    // ========== OPERADORES RELACIONALES ==========
-    
-    // Ejemplo 5: Operadores de igualdad y desigualdad
-    write 5000; // Indicador de operadores de igualdad
-    if a = 10 then
-        write 1 // Verdadero
-    else
-        write 0
-    end;
-    
-    if b != y then
-        write 1 // Verdadero (5 != 3)
-    else
-        write 0
-    end;
-    
-    // Ejemplo 6: Operadores de comparación (<, >, <=, >=)
-    write 6000; // Indicador de operadores de comparación
-    if a > b then
-        write 1 // Verdadero (10 > 5)
-    else
-        write 0
-    end;
-    
-    if y < x then
-        write 1 // Verdadero (3 < 7)
-    else
-        write 0
-    end;
-    
-    if a >= 10 then
-        write 1 // Verdadero (10 >= 10)
-    else
-        write 0
-    end;
-    
-    if b <= 5 then
-        write 1 // Verdadero (5 <= 5)
-    else
-        write 0
-    end;
-    
-    // ========== OPERADORES LÓGICOS ==========
-    
-    // Ejemplo 7: Operador AND (&&)
-    write 7000; // Indicador de operador AND
-    if (a > 5) && (b < 10) then
-        write 1 // Verdadero
-    else
-        write 0
-    end;
-    
-    if (x = 7) && (y = 3) then
-        write 1 // Verdadero
-    else
-        write 0
-    end;
-    
-    // Ejemplo 8: Operador OR (||)
-    write 8000; // Indicador de operador OR
-    if (a < 5) || (b > 2) then
-        write 1 // Verdadero (segunda condición es verdadera)
-    else
-        write 0
-    end;
-    
-    if (x = 0) || (y = 0) then
-        write 0 // Falso
-    else
-        write 1
-    end;
-    
-    // Ejemplo 9: Operador NOT (!)
-    write 9000; // Indicador de operador NOT
-    if !(a < 5) then
-        write 1 // Verdadero (NOT falso = verdadero)
-    else
-        write 0
-    end;
-    
-    if !(b = y) then
-        write 1 // Verdadero (NOT falso = verdadero, 5 != 3)
-    else
-        write 0
-    end;
-    
-    // Ejemplo 10: Expresiones complejas combinando operadores
-    write 10000; // Indicador de expresiones complejas
-    
-    // Combinación de operadores matemáticos y relacionales
-    if (a ** 2) > (b * 10) then
-        write 1 // 100 > 50, verdadero
-    else
-        write 0
-    end;
-    
-    // Combinación de operadores lógicos
-    if ((a > b) && (x < 10)) || (y = 0) then
-        write 1 // Primera parte verdadera
-    else
-        write 0
-    end;
-    
-    // Expresión compleja con paréntesis
-    if !((a % 2) = 0) || ((b + y) >= 8) then
-        write 1 // Segunda parte verdadera (5+3 >= 8)
-    else
-        write 0
-    end;
-    
-    // Ejemplo 11: Precedencia de operadores
-    write 11000; // Indicador de precedencia
-    z := 2 + 3 * 4; // = 2 + 12 = 14
-    write z;
-    
-    z := (2 + 3) * 4; // = 5 * 4 = 20
-    write z;
-    
-    z := 2 ** 3 + 1; // = 8 + 1 = 9
-    write z;
-    
-    z := 2 ** (3 + 1); // = 2^4 = 16
-    write z
+    repeat
+        read x;
+        read y;
+        
+        // Operadores relacionales
+        write x > y;
+        write x >= y;
+        write x <= y;
+        write x != y;
+        write x = y;
+        
+        // Operadores matemáticos
+        write x + y;
+        write x - y;
+        write x * y;
+        if y != 0 then
+            write x / y
+        end;
+        write x % y;
+        write x ** 2;
+        
+        // Operadores lógicos
+        a := x <= y;
+        b := x >= y;
+        write a && b;
+        write a || b;
+        write !a;
+        
+        read res
+    until res = 0
 end
