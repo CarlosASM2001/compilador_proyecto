@@ -180,7 +180,7 @@
 89:     LDA       7,1(7)        saltar caso verdadero
 90:     LDC       0,1(0)        caso verdadero
 * <- Operacion: diferente
-* If: el salto hacia el else debe estar aqui
+91:     JEQ       0,8(7)        if: jmp hacia else si condicion es falsa
 * -> escribir
 * -> Operacion: entre
 * -> identificador
@@ -195,8 +195,7 @@
 * <- Operacion: entre
 97:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
-* If: el salto hacia el final debe estar aqui
-91:     JEQ       0,7(7)        if: jmp hacia else
+* If: fin del bloque then
 * <- if
 * -> escribir
 * -> Operacion: modulo
