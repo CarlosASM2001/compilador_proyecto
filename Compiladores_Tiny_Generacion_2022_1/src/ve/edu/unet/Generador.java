@@ -52,6 +52,9 @@ public class Generador {
     
     // Variables para el salto al main
     private static int saltoAlMain = -1;
+    
+    // Mapa de llamadas pendientes a funciones
+    private static Map<String, java.util.List<Integer>> llamadasPendientes = new HashMap<>();
 	
 	public static void setTablaSimbolos(TablaSimbolos tabla){
 		tablaSimbolos = tabla;
@@ -63,6 +66,7 @@ public class Generador {
 		funcionesRegistradas.clear();
 		inicioFuncion.clear();
 		funcionesEmitidas.clear();
+		llamadasPendientes.clear();
 		desplazamientoTmp = 0;
 		
 		System.out.println();
@@ -100,13 +104,12 @@ public class Generador {
 	//prerequisito: Fijar la tabla de simbolos antes de generar el codigo objeto 
 	private static void generar(NodoBase nodo){
 		if(tablaSimbolos!=null){
-			UtGen.emitirComentario("Generando nodo tipo: " + nodo.getClass().getSimpleName());
 			if (nodo instanceof NodoPrograma){
 				generarPrograma(nodo);
 			}else if (nodo instanceof NodoDeclaracion){
 				generarDeclaracion(nodo);
 			}else if (nodo instanceof NodoFuncion){
-				registrarFuncion((NodoFuncion) nodo);
+				generarFuncion(nodo);
 			}else if (nodo instanceof NodoIf){
 				generarIf(nodo);
 			}else if (nodo instanceof NodoRepeat){
@@ -149,41 +152,23 @@ public class Generador {
 		NodoPrograma n = (NodoPrograma)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> programa");
 		
-		// Guardar las funciones para procesarlas después
-		java.util.List<NodoFuncion> funcionesParaProcesar = new java.util.ArrayList<>();
-		
-		// Procesar todo el árbol, separando declaraciones globales y funciones
-		NodoBase actual = n.getGlobal_block();
-		while(actual != null){
-			UtGen.emitirComentario("Procesando nodo tipo: " + actual.getClass().getSimpleName());
-			if(actual instanceof NodoFuncion){
-				UtGen.emitirComentario("Encontrada funcion en el arbol global: " + ((NodoFuncion)actual).getNombre());
-				funcionesParaProcesar.add((NodoFuncion)actual);
-			} else {
-				generar(actual);
-			}
-			actual = actual.getHermanoDerecha();
+		// Generar declaraciones globales
+		if(n.getGlobal_block() != null){
+			generar(n.getGlobal_block());
 		}
 		
-		// Si hay funciones, insertar salto al main
-		if(!funcionesParaProcesar.isEmpty() || n.getFunction_block() != null){
-			UtGen.emitirComentario("Salto al programa principal");
-			int posicionSalto = UtGen.emitirSalto(1);
+		// Si hay funciones, emitir salto al main
+		if(n.getFunction_block() != null){
+			UtGen.emitirComentario("Salto inicial al programa principal");
+			int saltoInicial = UtGen.emitirSalto(1);
 			
 			// Generar todas las funciones
-			for(NodoFuncion funcion : funcionesParaProcesar){
-				generar(funcion);
-			}
-			
-			// Generar funciones del bloque de funciones si existe
-			if(n.getFunction_block() != null){
-				generar(n.getFunction_block());
-			}
+			generar(n.getFunction_block());
 			
 			// Completar el salto al main
 			int inicioMain = UtGen.emitirSalto(0);
-			UtGen.cargarRespaldo(posicionSalto);
-			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "salto al programa principal");
+			UtGen.cargarRespaldo(saltoInicial);
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "salto inicial al main");
 			UtGen.restaurarRespaldo();
 		}
 		
@@ -240,8 +225,21 @@ public class Generador {
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- declaracion");
-		
-		// NO insertar salto aquí - lo haremos en generarPrograma
+	}
+	
+	// Registrar funciones sin generar código (primera pasada)
+	private static void registrarFunciones(NodoBase nodo){
+		NodoBase actual = nodo;
+		while(actual != null){
+			if(actual instanceof NodoFuncion){
+				NodoFuncion funcion = (NodoFuncion)actual;
+				if(funcion.getNombre() != null){
+					funcionesRegistradas.put(funcion.getNombre(), funcion);
+					// Las direcciones de inicio se asignarán cuando se genere el código
+				}
+			}
+			actual = actual.getHermanoDerecha();
+		}
 	}
 
     // Emite el cuerpo de una función (una sola vez) y registra su inicio
@@ -277,7 +275,8 @@ public class Generador {
     }
 
     // Generar función
-    private static void registrarFuncion(NodoFuncion funcion) {
+    private static void generarFuncion(NodoBase nodo) {
+        NodoFuncion funcion = (NodoFuncion)nodo;
         if (funcion.getNombre() == null) {
             UtGen.emitirComentario("ADVERTENCIA: funcion sin nombre");
             return;
@@ -288,6 +287,19 @@ public class Generador {
         // Registrar la dirección de inicio de la función
         int direccionInicio = UtGen.emitirSalto(0);
         inicioFuncion.put(funcion.getNombre(), direccionInicio);
+        
+        // Completar todas las llamadas pendientes a esta función
+        if(llamadasPendientes.containsKey(funcion.getNombre())){
+            UtGen.emitirComentario("Completando " + llamadasPendientes.get(funcion.getNombre()).size() + 
+                                  " llamadas pendientes a " + funcion.getNombre() + 
+                                  " (inicio en " + direccionInicio + ")");
+            for(Integer posicion : llamadasPendientes.get(funcion.getNombre())){
+                UtGen.cargarRespaldo(posicion);
+                UtGen.emitirRM_Abs("LDA", UtGen.PC, direccionInicio, "call: salto a funcion " + funcion.getNombre());
+                UtGen.restaurarRespaldo();
+            }
+            llamadasPendientes.remove(funcion.getNombre());
+        }
         
         if(UtGen.debug) UtGen.emitirComentario("-> funcion: " + funcion.getNombre());
         
@@ -401,9 +413,16 @@ public class Generador {
 		// 3) Saltar a la función
 		Integer inicio = inicioFuncion.get(n.getNombreFuncion());
 		if (inicio != null) {
+			UtGen.emitirComentario("Saltando a funcion " + n.getNombreFuncion() + " en direccion " + inicio);
 			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicio, "call: salto a funcion " + n.getNombreFuncion());
 		} else {
-			UtGen.emitirComentario("ERROR: funcion no encontrada: " + n.getNombreFuncion());
+			// La función existe pero aún no se ha generado su código
+			// Guardar la posición actual para completar después
+			int posicionActual = UtGen.emitirSalto(1);
+			if(!llamadasPendientes.containsKey(n.getNombreFuncion())){
+				llamadasPendientes.put(n.getNombreFuncion(), new java.util.ArrayList<>());
+			}
+			llamadasPendientes.get(n.getNombreFuncion()).add(posicionActual);
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- llamada funcion");

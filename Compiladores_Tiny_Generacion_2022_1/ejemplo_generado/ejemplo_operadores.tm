@@ -335,6 +335,6 @@
 * <- Operacion: not
 179:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
-* <- programa
-* Fin de la ejecucion.
+* Fin del programa principal
 180:    HALT      0,0,0         
+* <- programa

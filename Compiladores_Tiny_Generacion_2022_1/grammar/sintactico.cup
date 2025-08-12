@@ -139,6 +139,8 @@ non terminal NodoBase term;
 non terminal NodoBase factor;
 non terminal NodoBase argument_list;
 non terminal NodoBase block;
+non terminal NodoBase global_declarations;
+non terminal NodoBase function_declarations;
 
 /* Precedencia de operadores */
 precedence left OR;
@@ -150,41 +152,62 @@ precedence left TIMES, OVER, MOD;
 precedence right POW;
 
 // Regla principal del programa
-program ::= declaration_seq:d main:m 
-           {: if(debug) System.out.println("\t regla programa completo"); 
-              ast = new NodoPrograma(d, m);
+program ::= global_declarations:g function_declarations:f main:m
+           {: if(debug) System.out.println("\t programa con globales, funciones y main"); 
+              ast = new NodoPrograma(g, f, m);
+           :}
+         | global_declarations:g main:m
+           {: if(debug) System.out.println("\t programa con globales y main"); 
+              ast = new NodoPrograma(g, m);
+           :}
+         | function_declarations:f main:m
+           {: if(debug) System.out.println("\t programa con funciones y main"); 
+              ast = new NodoPrograma(null, f, m);
            :}
          | main:m 
-           {: if(debug) System.out.println("\t regla programa solo main"); 
+           {: if(debug) System.out.println("\t programa solo main"); 
               ast = new NodoPrograma(null, m);
            :}
 ;
 
-// Secuencia de declaraciones (globales y funciones)
-declaration_seq ::= declaration_seq:seq declaration:decl
-                   {: if(debug) System.out.println("\t secuencia declaraciones"); 
-                      NodoBase current = seq;
-                      if(current != null){
-                          while(current.TieneHermano()){
-                              current = current.getHermanoDerecha();
+// Secuencia de declaraciones globales
+global_declarations ::= global_declarations:seq global_declaration:decl
+                       {: if(debug) System.out.println("\t secuencia declaraciones globales"); 
+                          NodoBase current = seq;
+                          if(current != null){
+                              while(current.TieneHermano()){
+                                  current = current.getHermanoDerecha();
+                              }
+                              current.setHermanoDerecha(decl);
+                              RESULT = seq;
+                          } else {
+                              RESULT = decl;
                           }
-                          current.setHermanoDerecha(decl);
-                          RESULT = seq;
-                      } else {
+                       :}
+                     | global_declaration:decl
+                       {: if(debug) System.out.println("\t declaracion global unica"); 
                           RESULT = decl;
-                      }
-                   :}
-                 | declaration:decl
-                   {: if(debug) System.out.println("\t declaracion unica"); 
-                      RESULT = decl;
-                   :}
+                       :}
 ;
 
-// Tipos de declaraciones
-declaration ::= global_declaration:g
-               {: RESULT = g; :}
-             | function_declaration:f
-               {: RESULT = f; :}
+// Secuencia de declaraciones de funciones
+function_declarations ::= function_declarations:seq function_declaration:func
+                         {: if(debug) System.out.println("\t secuencia de funciones"); 
+                            NodoBase current = seq;
+                            if(current != null){
+                                while(current.TieneHermano()){
+                                    current = current.getHermanoDerecha();
+                                }
+                                current.setHermanoDerecha(func);
+                                RESULT = seq;
+                            } else {
+                                RESULT = func;
+                            }
+                         :}
+                       | function_declaration:func
+                         {: if(debug) System.out.println("\t funcion unica"); 
+                            RESULT = func;
+                         :}
 ;
 
 // Declaraciones globales
