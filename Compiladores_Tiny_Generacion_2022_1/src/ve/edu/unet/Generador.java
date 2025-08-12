@@ -152,32 +152,25 @@ public class Generador {
 		NodoPrograma n = (NodoPrograma)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> programa");
 		
-		// Generar declaraciones globales
+		// 1. Generar declaraciones globales
 		if(n.getGlobal_block() != null){
 			generar(n.getGlobal_block());
 		}
 		
-		// Si hay funciones, emitir salto al main
-		if(n.getFunction_block() != null){
-			UtGen.emitirComentario("Salto inicial al programa principal");
-			int saltoInicial = UtGen.emitirSalto(1);
-			
-			// Generar todas las funciones
-			generar(n.getFunction_block());
-			
-			// Completar el salto al main
-			int inicioMain = UtGen.emitirSalto(0);
-			UtGen.cargarRespaldo(saltoInicial);
-			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "salto inicial al main");
-			UtGen.restaurarRespaldo();
-		}
-		
-		// Generar programa principal
+		// 2. Generar programa principal
 		if(n.getMain() != null){
 			generar(n.getMain());
 			// Generar HALT después del main
 			UtGen.emitirComentario("Fin del programa principal");
 			UtGen.emitirRO("HALT", 0, 0, 0, "");
+		}
+		
+		// 3. Generar funciones (después del HALT, no se ejecutarán a menos que se llamen)
+		if(n.getFunction_block() != null){
+			UtGen.emitirComentario("Inicio de las funciones");
+			
+			// Generar el código de las funciones
+			generar(n.getFunction_block());
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- programa");
@@ -216,18 +209,16 @@ public class Generador {
 				UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "global: inicializar variable " + n.getNombreVariable() + " a cero");
 				UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "global: almacenar en direccion " + direccion);
 			} else {
-				// Variable local - reservar espacio en el frame actual
+				// Variable local - inicializar a cero
 				UtGen.emitirRM("LDC", UtGen.AC, 0, 0, "local: inicializar variable " + n.getNombreVariable() + " a cero");
 				UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "local: almacenar en direccion " + direccion);
-				// Nota: En una implementación más sofisticada, las variables locales 
-				// deberían usar un frame pointer diferente del GP
 			}
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- declaracion");
 	}
 	
-	// Registrar funciones sin generar código (primera pasada)
+	// Registrar funciones (primera pasada)
 	private static void registrarFunciones(NodoBase nodo){
 		NodoBase actual = nodo;
 		while(actual != null){
@@ -235,7 +226,6 @@ public class Generador {
 				NodoFuncion funcion = (NodoFuncion)actual;
 				if(funcion.getNombre() != null){
 					funcionesRegistradas.put(funcion.getNombre(), funcion);
-					// Las direcciones de inicio se asignarán cuando se genere el código
 				}
 			}
 			actual = actual.getHermanoDerecha();
@@ -282,26 +272,13 @@ public class Generador {
             return;
         }
         
-        funcionesRegistradas.put(funcion.getNombre(), funcion);
+        if(UtGen.debug) UtGen.emitirComentario("-> funcion: " + funcion.getNombre());
         
-        // Registrar la dirección de inicio de la función
+        // NO generar código para los parámetros - ya tienen valores asignados
+        // Solo necesitamos registrar la dirección de inicio
         int direccionInicio = UtGen.emitirSalto(0);
         inicioFuncion.put(funcion.getNombre(), direccionInicio);
-        
-        // Completar todas las llamadas pendientes a esta función
-        if(llamadasPendientes.containsKey(funcion.getNombre())){
-            UtGen.emitirComentario("Completando " + llamadasPendientes.get(funcion.getNombre()).size() + 
-                                  " llamadas pendientes a " + funcion.getNombre() + 
-                                  " (inicio en " + direccionInicio + ")");
-            for(Integer posicion : llamadasPendientes.get(funcion.getNombre())){
-                UtGen.cargarRespaldo(posicion);
-                UtGen.emitirRM_Abs("LDA", UtGen.PC, direccionInicio, "call: salto a funcion " + funcion.getNombre());
-                UtGen.restaurarRespaldo();
-            }
-            llamadasPendientes.remove(funcion.getNombre());
-        }
-        
-        if(UtGen.debug) UtGen.emitirComentario("-> funcion: " + funcion.getNombre());
+        UtGen.emitirComentario("DEBUG: Funcion " + funcion.getNombre() + " registrada en direccion " + direccionInicio);
         
         // Generar el cuerpo de la función
         if(funcion.getCuerpo() != null){
@@ -413,7 +390,8 @@ public class Generador {
 		// 3) Saltar a la función
 		Integer inicio = inicioFuncion.get(n.getNombreFuncion());
 		if (inicio != null) {
-			UtGen.emitirComentario("Saltando a funcion " + n.getNombreFuncion() + " en direccion " + inicio);
+			// DEBUG: Imprimir la dirección de salto
+			UtGen.emitirComentario("DEBUG: saltando a direccion " + inicio + " para funcion " + n.getNombreFuncion());
 			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicio, "call: salto a funcion " + n.getNombreFuncion());
 		} else {
 			// La función existe pero aún no se ha generado su código

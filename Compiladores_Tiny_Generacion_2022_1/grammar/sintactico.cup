@@ -152,21 +152,21 @@ precedence left TIMES, OVER, MOD;
 precedence right POW;
 
 // Regla principal del programa
-program ::= global_declarations:g function_declarations:f main:m
-           {: if(debug) System.out.println("\t programa con globales, funciones y main"); 
+program ::= global_declarations:g main:m function_declarations:f
+           {: if(debug) System.out.println("\t programa con globales, main y funciones"); 
               ast = new NodoPrograma(g, f, m);
            :}
          | global_declarations:g main:m
            {: if(debug) System.out.println("\t programa con globales y main"); 
-              ast = new NodoPrograma(g, m);
+              ast = new NodoPrograma(g, null, m);
            :}
-         | function_declarations:f main:m
-           {: if(debug) System.out.println("\t programa con funciones y main"); 
+         | main:m function_declarations:f
+           {: if(debug) System.out.println("\t programa con main y funciones"); 
               ast = new NodoPrograma(null, f, m);
            :}
          | main:m 
            {: if(debug) System.out.println("\t programa solo main"); 
-              ast = new NodoPrograma(null, m);
+              ast = new NodoPrograma(null, null, m);
            :}
 ;
 
