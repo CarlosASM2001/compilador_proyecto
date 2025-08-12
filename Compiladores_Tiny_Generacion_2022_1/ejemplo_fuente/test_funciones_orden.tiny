@@ -1,0 +1,32 @@
+{Ejemplo que muestra el problema de orden de funciones}
+{Este programa llama a funciones antes de que sean definidas}
+
+global contador;
+
+begin
+    var resultado;
+    contador := 0;
+    
+    {Llamada a función aún no definida}
+    resultado := call suma(5, 3);
+    write resultado;
+    
+    {Llamada a otra función no definida}
+    resultado := call multiplicar(4, 2);
+    write resultado;
+    
+    write contador {Debe ser 2}
+end
+
+{Las funciones se definen después del main}
+function suma(a, b)
+begin
+    contador := contador + 1;
+    return a + b
+end
+
+function multiplicar(x, y)
+begin
+    contador := contador + 1;
+    return x * y
+end

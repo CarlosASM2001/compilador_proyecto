@@ -62,9 +62,7 @@ public class Generador {
 		System.out.println();
 		generarPreludioEstandar();
 		generar(raiz);
-		/*Genero el codigo de finalizacion de ejecucion del codigo*/   
-		UtGen.emitirComentario("Fin de la ejecucion.");
-		UtGen.emitirRO("HALT", 0, 0, 0, "");
+		// El HALT ya se genera dentro de generarPrograma
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
@@ -81,9 +79,7 @@ public class Generador {
 			// Generar código objeto
 			generarPreludioEstandar();
 			generar(raiz);
-			/*Genero el codigo de finalizacion de ejecucion del codigo*/   
-			UtGen.emitirComentario("Fin de la ejecucion.");
-			UtGen.emitirRO("HALT", 0, 0, 0, "");
+			// El HALT ya se genera dentro de generarPrograma
 			
 			System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
 		} finally {
@@ -141,26 +137,37 @@ public class Generador {
 	}
 
 	private static void generarPrograma(NodoBase nodo){
-		NodoPrograma n = (NodoPrograma)nodo;
-		if(UtGen.debug) UtGen.emitirComentario("-> programa");
-		
-		// Generar declaraciones globales
-		if(n.getGlobal_block() != null){
-			generar(n.getGlobal_block());
-		}
-		
-		// Registrar funciones (sin generar su cuerpo)
-		if(n.getFunction_block() != null){
-			generar(n.getFunction_block());
-		}
-		
-		// Generar programa principal
-		if(n.getMain() != null){
-			generar(n.getMain());
-		}
-		
-		if(UtGen.debug) UtGen.emitirComentario("<- programa");
-	}
+    NodoPrograma n = (NodoPrograma)nodo;
+    if(UtGen.debug) UtGen.emitirComentario("-> programa");
+    
+    // 1. Generar declaraciones globales
+    if(n.getGlobal_block() != null){
+        generar(n.getGlobal_block());
+    }
+    
+    // 2. Registrar funciones (sin generar su cuerpo)
+    if(n.getFunction_block() != null){
+        registrarFunciones(n.getFunction_block());
+    }
+    
+    // 3. Generar programa principal
+    if(n.getMain() != null){
+        generar(n.getMain());
+    }
+    
+    // 4. Insertar HALT aquí para terminar el programa principal
+    UtGen.emitirComentario("Fin del programa principal");
+    UtGen.emitirRO("HALT", 0, 0, 0, "");
+    
+    // 5. Ahora generar el código de todas las funciones
+    if(n.getFunction_block() != null){
+        UtGen.emitirComentario("=== INICIO SECCION DE FUNCIONES ===");
+        generarTodasLasFunciones();
+        UtGen.emitirComentario("=== FIN SECCION DE FUNCIONES ===");
+    }
+    
+    if(UtGen.debug) UtGen.emitirComentario("<- programa");
+}
 
 	private static void generarDeclaracion(NodoBase nodo){
 		NodoDeclaracion n = (NodoDeclaracion)nodo;
@@ -246,6 +253,33 @@ public class Generador {
         }
         funcionesRegistradas.put(funcion.getNombre(), funcion);
         UtGen.emitirComentario("registrada funcion: " + funcion.getNombre());
+    }
+    
+    // Registrar todas las funciones del bloque
+    private static void registrarFunciones(NodoBase funcionesBloque) {
+        NodoBase actual = funcionesBloque;
+        while(actual != null) {
+            if(actual instanceof NodoFuncion) {
+                registrarFuncion((NodoFuncion)actual);
+            }
+            actual = actual.getHermanoDerecha();
+        }
+    }
+    
+    // Generar código de todas las funciones registradas
+    private static void generarTodasLasFunciones() {
+        for(Map.Entry<String, NodoFuncion> entry : funcionesRegistradas.entrySet()) {
+            String nombreFuncion = entry.getKey();
+            NodoFuncion funcion = entry.getValue();
+            
+            // Marcar la posición de inicio de la función
+            inicioFuncion.put(nombreFuncion, UtGen.emitSkip(0));
+            
+            // Generar el código de la función
+            generarFuncion(funcion);
+            
+            funcionesEmitidas.add(nombreFuncion);
+        }
     }
 
 	private static void generarFor(NodoBase nodo){
