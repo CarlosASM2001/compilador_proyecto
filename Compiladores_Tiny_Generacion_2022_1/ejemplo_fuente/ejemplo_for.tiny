@@ -1,0 +1,68 @@
+{Ejemplo de bucles FOR con diferentes configuraciones}
+
+// Variables globales para los ejemplos
+global contador;
+global suma_total;
+
+begin
+    var i;
+    var limite;
+    var paso;
+    
+    // Ejemplo 1: FOR básico con step 1
+    write 10; // Indicador de ejemplo 1
+    for i := 1 to 5 step 1
+        write i
+    end;
+    
+    // Ejemplo 2: FOR con step mayor a 1
+    write 20; // Indicador de ejemplo 2
+    for i := 0 to 10 step 2
+        write i
+    end;
+    
+    // Ejemplo 3: FOR con step negativo (decremento)
+    write 30; // Indicador de ejemplo 3
+    for i := 10 to 1 step -1
+        write i
+    end;
+    
+    // Ejemplo 4: FOR con variables como límites
+    write 40; // Indicador de ejemplo 4
+    limite := 7;
+    paso := 1;
+    for i := 0 to limite step paso
+        write i
+    end;
+    
+    // Ejemplo 5: FOR con BREAK
+    write 50; // Indicador de ejemplo 5
+    suma_total := 0;
+    for i := 1 to 20 step 1
+        suma_total := suma_total + i;
+        if suma_total > 30 then
+            break
+        end;
+        write i
+    end;
+    write suma_total;
+    
+    // Ejemplo 6: FOR con CONTINUE
+    write 60; // Indicador de ejemplo 6
+    for i := 1 to 10 step 1
+        if i % 2 = 0 then
+            continue
+        end;
+        write i // Solo imprime números impares
+    end;
+    
+    // Ejemplo 7: FOR anidados
+    write 70; // Indicador de ejemplo 7
+    var j;
+    for i := 1 to 3 step 1
+        for j := 1 to 2 step 1
+            contador := i * 10 + j;
+            write contador
+        end
+    end
+end
