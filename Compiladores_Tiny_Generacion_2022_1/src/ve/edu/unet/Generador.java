@@ -52,7 +52,6 @@ public class Generador {
     
     // Variables para el salto al main
     private static int saltoAlMain = -1;
-    private static boolean saltoPrincipalEmitido = false;
 	
 	public static void setTablaSimbolos(TablaSimbolos tabla){
 		tablaSimbolos = tabla;
@@ -60,11 +59,11 @@ public class Generador {
 	
 	public static void generarCodigoObjeto(NodoBase raiz){
 		// Resetear variables estáticas
-		saltoPrincipalEmitido = false;
 		saltoAlMain = -1;
 		funcionesRegistradas.clear();
 		inicioFuncion.clear();
 		funcionesEmitidas.clear();
+		desplazamientoTmp = 0;
 		
 		System.out.println();
 		System.out.println();
@@ -101,6 +100,7 @@ public class Generador {
 	//prerequisito: Fijar la tabla de simbolos antes de generar el codigo objeto 
 	private static void generar(NodoBase nodo){
 		if(tablaSimbolos!=null){
+			UtGen.emitirComentario("Generando nodo tipo: " + nodo.getClass().getSimpleName());
 			if (nodo instanceof NodoPrograma){
 				generarPrograma(nodo);
 			}else if (nodo instanceof NodoDeclaracion){
@@ -149,21 +149,41 @@ public class Generador {
 		NodoPrograma n = (NodoPrograma)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> programa");
 		
-		// Generar declaraciones globales
-		if(n.getGlobal_block() != null){
-			generar(n.getGlobal_block());
+		// Guardar las funciones para procesarlas después
+		java.util.List<NodoFuncion> funcionesParaProcesar = new java.util.ArrayList<>();
+		
+		// Procesar todo el árbol, separando declaraciones globales y funciones
+		NodoBase actual = n.getGlobal_block();
+		while(actual != null){
+			UtGen.emitirComentario("Procesando nodo tipo: " + actual.getClass().getSimpleName());
+			if(actual instanceof NodoFuncion){
+				UtGen.emitirComentario("Encontrada funcion en el arbol global: " + ((NodoFuncion)actual).getNombre());
+				funcionesParaProcesar.add((NodoFuncion)actual);
+			} else {
+				generar(actual);
+			}
+			actual = actual.getHermanoDerecha();
 		}
 		
-		// Generar las funciones (el salto se emite en la primera función)
-		if(n.getFunction_block() != null){
-			generar(n.getFunction_block());
-		}
-		
-		// Completar el salto al main si se emitió
-		if(saltoPrincipalEmitido && saltoAlMain >= 0){
+		// Si hay funciones, insertar salto al main
+		if(!funcionesParaProcesar.isEmpty() || n.getFunction_block() != null){
+			UtGen.emitirComentario("Salto al programa principal");
+			int posicionSalto = UtGen.emitirSalto(1);
+			
+			// Generar todas las funciones
+			for(NodoFuncion funcion : funcionesParaProcesar){
+				generar(funcion);
+			}
+			
+			// Generar funciones del bloque de funciones si existe
+			if(n.getFunction_block() != null){
+				generar(n.getFunction_block());
+			}
+			
+			// Completar el salto al main
 			int inicioMain = UtGen.emitirSalto(0);
-			UtGen.cargarRespaldo(saltoAlMain);
-			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "completar salto al main");
+			UtGen.cargarRespaldo(posicionSalto);
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "salto al programa principal");
 			UtGen.restaurarRespaldo();
 		}
 		
@@ -220,6 +240,8 @@ public class Generador {
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- declaracion");
+		
+		// NO insertar salto aquí - lo haremos en generarPrograma
 	}
 
     // Emite el cuerpo de una función (una sola vez) y registra su inicio
@@ -259,13 +281,6 @@ public class Generador {
         if (funcion.getNombre() == null) {
             UtGen.emitirComentario("ADVERTENCIA: funcion sin nombre");
             return;
-        }
-        
-        // Si es la primera función, emitir un salto al final de todas las funciones
-        if(funcionesRegistradas.isEmpty() && !saltoPrincipalEmitido){
-            UtGen.emitirComentario("Salto al programa principal");
-            saltoAlMain = UtGen.emitirSalto(1);
-            saltoPrincipalEmitido = true;
         }
         
         funcionesRegistradas.put(funcion.getNombre(), funcion);

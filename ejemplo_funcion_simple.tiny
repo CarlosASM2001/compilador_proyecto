@@ -1,0 +1,20 @@
+{Ejemplo simple que simula el comportamiento de funciones}
+
+global x;
+
+begin
+    var resultado;
+    var temp;
+    var num;
+    
+    x := 5;
+    
+    {Simular llamada a duplicar(x)}
+    num := x;
+    temp := num * 2;
+    x := x + 1;
+    resultado := temp;
+    
+    write resultado; {Debe mostrar 10}
+    write x {Debe mostrar 6}
+end

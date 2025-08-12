@@ -52,7 +52,7 @@
 * Return implicito al final de la funcion
 20:     LD        7,0(1)        return: salto usando direccion en AC1
 * <- funcion: duplicar
-4:      LDA       7,16(7)       completar salto al main
+4:      LDA       7,16(7)       salto al programa principal
 * -> declaracion: resultado
 * Declaracion de variable: resultado (local)
 21:     LDC       0,0(0)        local: inicializar variable resultado a cero
