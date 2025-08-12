@@ -123,6 +123,7 @@ Los archivos de ejemplo están en `ejemplo_fuente/`:
 
 ### Scripts Disponibles
 
+- `./demostrar_ejemplos.sh`: Muestra una demostración completa del sistema y ejemplos disponibles
 - `./compilar_ejemplos.sh`: Compila todos los archivos .tiny y genera archivos .tm
 - `./probar_ejemplo.sh <nombre>`: Compila y muestra detalles de un ejemplo específico
 - `./ejecutar_con_salida.sh`: Ejecuta todos los ejemplos y muestra resultados

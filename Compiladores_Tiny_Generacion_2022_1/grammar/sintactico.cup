@@ -15,10 +15,14 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 	public static void main(String args[]) throws Exception {
 		SymbolFactory sf = new DefaultSymbolFactory();
 		parser parser_obj;
+		String archivoEntrada = null;
+		
 		if (args.length==0) 
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(System.in),sf),sf);
-		else
+		else {
+			archivoEntrada = args[0];
 			parser_obj=new parser(new LexicoExtendido(new InputStreamReader(new java.io.FileInputStream(args[0])),sf),sf);
+		}
 
 		parser_obj.parse();
 		NodoBase root=parser_obj.action_obj.getASTroot();
@@ -31,6 +35,27 @@ Mas informacion en: http//4thmouse.com/index.php/2007/02/15/using-custom-symbols
 		ts.ImprimirClaves();
 		Generador.setTablaSimbolos(ts);
 		Generador.generarCodigoObjeto(root);
+		
+		// Generar archivo .tm si se especificó archivo de entrada
+		if (archivoEntrada != null) {
+			try {
+				// Obtener nombre base del archivo sin extensión y directorio
+				String nombreBase = new java.io.File(archivoEntrada).getName();
+				if (nombreBase.endsWith(".tiny")) {
+					nombreBase = nombreBase.substring(0, nombreBase.length() - 5);
+				}
+				String archivoSalida = "ejemplo_generado/" + nombreBase + ".tm";
+				
+				// Crear directorio si no existe
+				new java.io.File("ejemplo_generado").mkdirs();
+				
+				System.out.println();
+				System.out.println("Generando archivo de código objeto: " + archivoSalida);
+				Generador.generarCodigoObjetoAArchivo(root, archivoSalida);
+			} catch (Exception e) {
+				System.err.println("Error al generar archivo .tm: " + e.getMessage());
+			}
+		}
 	}
 
 :}
