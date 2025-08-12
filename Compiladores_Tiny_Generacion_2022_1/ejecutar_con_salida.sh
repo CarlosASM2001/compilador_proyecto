@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Compilando y Ejecutando Programa Extendido ==="
+echo "=== Compilando Todos los Ejemplos Tiny ==="
 
 # Cambiar al directorio del script si no estamos ya ahí
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,24 +10,56 @@ cd "$SCRIPT_DIR"
 mkdir -p salida
 mkdir -p ejemplo_generado
 
-echo "Ejecutando compilador..."
+echo "Ejecutando compilador para todos los ejemplos..."
 # Detectar el separador de classpath según el OS
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
     CLASSPATH_SEP=";"
 else
     CLASSPATH_SEP=":"
 fi
-java -cp "src${CLASSPATH_SEP}lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/programa_extendido.tiny > salida/resultado_compilacion.txt 2>&1
 
-echo "Resultados guardados en: salida/resultado_compilacion.txt"
+# Compilar todos los archivos .tiny
+echo "Archivos .tiny encontrados:"
+for archivo_tiny in ejemplo_fuente/*.tiny; do
+    if [[ -f "$archivo_tiny" ]]; then
+        nombre_base=$(basename "$archivo_tiny" .tiny)
+        echo "  • $nombre_base"
+        
+        # Compilar cada archivo
+        echo "Compilando $archivo_tiny..."
+        java -cp "src${CLASSPATH_SEP}lib/java-cup-11b-runtime.jar" ve.edu.unet.parser "$archivo_tiny" > "salida/${nombre_base}_compilacion.txt" 2>&1
+        
+        if [[ $? -eq 0 ]]; then
+            echo "  ✓ $nombre_base compilado exitosamente"
+        else
+            echo "  ✗ Error compilando $nombre_base"
+        fi
+    fi
+done
+
 echo ""
-echo "Contenido del archivo de salida:"
-echo "================================"
-cat salida/resultado_compilacion.txt
+echo "=== Resultados de Compilación ==="
+echo "Logs de compilación guardados en salida/"
+ls -la salida/*_compilacion.txt 2>/dev/null || echo "No se encontraron logs de compilación"
+
+echo ""
+echo "Contenido de los logs de compilación:"
+echo "===================================="
+for log_file in salida/*_compilacion.txt; do
+    if [[ -f "$log_file" ]]; then
+        echo ""
+        echo "--- $(basename "$log_file") ---"
+        cat "$log_file"
+    fi
+done
 
 echo ""
 echo "Archivos .tm generados en ejemplo_generado/:"
-ls -la ejemplo_generado/*.tm 2>/dev/null || echo "No se encontraron archivos .tm"
+if ls ejemplo_generado/*.tm 1> /dev/null 2>&1; then
+    ls -la ejemplo_generado/*.tm
+else
+    echo "No se encontraron archivos .tm"
+fi
 
 echo ""
-echo "=== Compilación completada ==="
+echo "=== Compilación de todos los ejemplos completada ==="

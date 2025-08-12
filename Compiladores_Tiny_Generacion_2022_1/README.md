@@ -71,11 +71,20 @@ Limpia archivos temporales y muestra la estructura del proyecto.
 # Compilar las clases Java
 javac -cp lib/java-cup-11b-runtime.jar src/ve/edu/unet/*.java src/ve/edu/unet/nodosAST/*.java
 
-# Ejecutar el compilador (Linux/macOS)
-java -cp "src:lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/programa_extendido.tiny
+# Compilar todos los ejemplos
+./compilar_ejemplos.sh
 
-# Ejecutar el compilador (Windows)
-java -cp "src;lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/programa_extendido.tiny
+# Probar un ejemplo específico
+./probar_ejemplo.sh ejemplo_funcion
+
+# Ejecutar todos los ejemplos y ver resultados
+./ejecutar_con_salida.sh
+
+# Compilar manualmente un ejemplo (Linux/macOS)
+java -cp "src:lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/ejemplo_funcion.tiny
+
+# Compilar manualmente un ejemplo (Windows)
+java -cp "src;lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/ejemplo_funcion.tiny
 ```
 
 ## Componentes del Compilador
@@ -106,7 +115,18 @@ java -cp "src;lib/java-cup-11b-runtime.jar" ve.edu.unet.parser ejemplo_fuente/pr
 ## Archivos de Prueba
 
 Los archivos de ejemplo están en `ejemplo_fuente/`:
-- `programa_extendido.tiny`: Programa completo que demuestra todas las características
+- `ejemplo_funcion.tiny`: Demuestra el uso de funciones y variables globales
+- `ejemplo_operadores.tiny`: Prueba todos los operadores (relacionales, matemáticos, lógicos)
+- `ejemplo_vectores.tiny`: Manejo de arrays y estructuras de control
+- `ejemplo_for.tiny`: Bucles for con incremento personalizado
+- `programa_extendido.tiny`: Programa completo original (mantenido para compatibilidad)
+
+### Scripts Disponibles
+
+- `./compilar_ejemplos.sh`: Compila todos los archivos .tiny y genera archivos .tm
+- `./probar_ejemplo.sh <nombre>`: Compila y muestra detalles de un ejemplo específico
+- `./ejecutar_con_salida.sh`: Ejecuta todos los ejemplos y muestra resultados
+- `./ejecutar_prueba.sh`: Prueba rápida de todos los ejemplos
 
 ## Salida
 
