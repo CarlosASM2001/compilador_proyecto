@@ -37,29 +37,5 @@ for archivo_tiny in ejemplo_fuente/*.tiny; do
     fi
 done
 
-echo ""
-echo "=== Resultados de Compilación ==="
-echo "Logs de compilación guardados en salida/"
-ls -la salida/*_compilacion.txt 2>/dev/null || echo "No se encontraron logs de compilación"
 
-echo ""
-echo "Contenido de los logs de compilación:"
-echo "===================================="
-for log_file in salida/*_compilacion.txt; do
-    if [[ -f "$log_file" ]]; then
-        echo ""
-        echo "--- $(basename "$log_file") ---"
-        cat "$log_file"
-    fi
-done
-
-echo ""
-echo "Archivos .tm generados en ejemplo_generado/:"
-if ls ejemplo_generado/*.tm 1> /dev/null 2>&1; then
-    ls -la ejemplo_generado/*.tm
-else
-    echo "No se encontraron archivos .tm"
-fi
-
-echo ""
 echo "=== Compilación de todos los ejemplos completada ==="

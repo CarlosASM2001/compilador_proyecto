@@ -27,20 +27,3 @@ echo "4. Volviendo al directorio raíz..."
 cd ../../../..
 
 echo "=== Compilación completada ==="
-
-echo ""
-echo "Para probar el compilador:"
-echo "Ejemplos disponibles:"
-for archivo in ejemplo_fuente/*.tiny; do
-    if [[ -f "$archivo" ]]; then
-        nombre_base=$(basename "$archivo" .tiny)
-        echo "  java -cp \"src${CLASSPATH_SEP}lib/java-cup-11b-runtime.jar\" ve.edu.unet.parser ejemplo_fuente/${nombre_base}.tiny"
-    fi
-done
-echo ""
-echo "Scripts disponibles:"
-echo "  ./compilar_ejemplos.sh     - Compila todos los ejemplos"
-echo "  ./ejecutar_con_salida.sh   - Ejecuta y muestra resultados de todos"
-echo "  ./probar_ejemplo.sh <nombre> - Prueba un ejemplo específico"
-echo ""
-echo "Ejemplo: ./probar_ejemplo.sh ejemplo_funcion"

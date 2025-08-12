@@ -74,17 +74,7 @@ echo "Compilaciones exitosas: $compilados_exitosos"
 echo "Compilaciones fallidas: $compilados_fallidos"
 echo ""
 
-# Mostrar archivos generados
-echo "Archivos .tm generados en ejemplo_generado/:"
-if ls ejemplo_generado/*.tm 1> /dev/null 2>&1; then
-    ls -la ejemplo_generado/*.tm
-else
-    echo "No se generaron archivos .tm"
-fi
 
-echo ""
-echo "Logs de compilación guardados en salida/"
-echo "=== Compilación de ejemplos completada ==="
 
 # Hacer el script ejecutable
 chmod +x "$0"
