@@ -157,49 +157,20 @@ public class Generador {
 		NodoFor n = (NodoFor) nodo;
 		int localidadSaltoInicio,localidadSaltoEnd, localidadActual;
 		if(UtGen.debug)	UtGen.emitirComentario("-> for");
-		
-		// Inicialización de la variable de control
 		generar(n.getValorInicial());
-		int direccionVar = tablaSimbolos.getDireccion(n.getVariable());
-		UtGen.emitirRM("ST", UtGen.AC, direccionVar, UtGen.GP, "for: inicializar variable " + n.getVariable());
-		
-		// Etiqueta de inicio del bucle
 		localidadSaltoInicio = UtGen.emitirSalto(0);
-		UtGen.emitirComentario("for: inicio del bucle");
-		
-		// Verificar condición (variable <= valor_final)
-		UtGen.emitirRM("LD", UtGen.AC, direccionVar, UtGen.GP, "for: cargar variable de control");
-		UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "for: guardar variable en pila temp");
-		
 		generar(n.getValorFinal());
-		UtGen.emitirRM("LD", UtGen.AC1, ++desplazamientoTmp, UtGen.MP, "for: cargar variable de pila temp");
-		
-		// Comparación: si variable > valor_final, saltar al final
-		UtGen.emitirRO("SUB", UtGen.AC, UtGen.AC1, UtGen.AC, "for: variable - valor_final");
 		localidadSaltoEnd = UtGen.emitirSalto(1);
-		UtGen.emitirComentario("for: salto condicional al final");
-		
-		// Cuerpo del bucle
+		UtGen.emitirComentario("for: el salto hacia el final debe estar aqui");
+		/* Genero el cuerpo del for */
 		generar(n.getCuerpo());
-		
-		// Incremento de la variable
-		UtGen.emitirRM("LD", UtGen.AC, direccionVar, UtGen.GP, "for: cargar variable para incremento");
-		UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "for: guardar variable en pila temp");
-		
+		/* Genero la iteracion del for */
 		generar(n.getIncremento());
-		UtGen.emitirRM("LD", UtGen.AC1, ++desplazamientoTmp, UtGen.MP, "for: cargar variable de pila temp");
-		UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC1, UtGen.AC, "for: incrementar variable");
-		UtGen.emitirRM("ST", UtGen.AC, direccionVar, UtGen.GP, "for: guardar variable incrementada");
-		
-		// Salto al inicio del bucle
-		UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadSaltoInicio, "for: salto al inicio");
-		
-		// Etiqueta de fin del bucle
+		UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadSaltoInicio, "for: salto incondicional al inicio");
 		localidadActual = UtGen.emitirSalto(0);
 		UtGen.cargarRespaldo(localidadSaltoEnd);
-		UtGen.emitirRM_Abs("JGT", UtGen.AC, localidadActual, "for: saltar si variable > final");
+		UtGen.emitirRM_Abs("JEQ", UtGen.AC, localidadActual, "for: jmp hacia el final");
 		UtGen.restaurarRespaldo();
-		
 		if(UtGen.debug)	UtGen.emitirComentario("<- for");
 	}
 
@@ -208,27 +179,19 @@ public class Generador {
 		int direccion;
 		if(UtGen.debug)	UtGen.emitirComentario("-> asignacion");		
 		/* Genero el codigo para la expresion a la derecha de la asignacion */
-		generar(n.getExpresion());
 		/* Ahora almaceno el valor resultante */
 		direccion = tablaSimbolos.getDireccion(n.getIdentificador());
-		
-		if(n.esAsignacionArray()){
-			// Asignación a array: arr[indice] = valor
-			UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "asignacion array: guardar valor");
-			
-			// Calcular dirección del array
-			generar(n.getIndice());
-			UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "asignacion array: cargar direccion base");
-			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, UtGen.AC1, "asignacion array: calcular direccion");
-			
-			// Cargar valor y almacenar en la dirección calculada
-			UtGen.emitirRM("LD", UtGen.AC1, ++desplazamientoTmp, UtGen.MP, "asignacion array: recuperar valor");
-			UtGen.emitirRM("ST", UtGen.AC1, 0, UtGen.AC, "asignacion array: almacenar en posicion calculada");
-		} else {
-			// Asignación normal: var = valor
+		if(n.getIndice() == null) {
+			generar(n.getExpresion());
 			UtGen.emitirRM("ST", UtGen.AC, direccion, UtGen.GP, "asignacion: almaceno el valor para el id " + n.getIdentificador());
 		}
-		
+		else{
+			UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "cargo direccion base en registro AC1");
+			generar(n.getIndice());
+			UtGen.emitirRO("ADD", UtGen.AC1, UtGen.AC, UtGen.AC1, "calculo direccion real");
+			generar(n.getExpresion());
+			UtGen.emitirRM("ST", UtGen.AC, 0, UtGen.AC1, "cargar valor de identificador con desplazamiento: "+n.getIdentificador());
+		}
 		if(UtGen.debug)	UtGen.emitirComentario("<- asignacion");
 	}
 	
@@ -268,18 +231,15 @@ public class Generador {
 		int direccion;
 		if(UtGen.debug)	UtGen.emitirComentario("-> identificador");
 		direccion = tablaSimbolos.getDireccion(n.getNombre());
-		
-		if(n.getDesplazamiento() != null){
-			// Acceso a array: arr[indice]
-			generar(n.getDesplazamiento());
-			UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "identificador array: cargar direccion base");
-			UtGen.emitirRO("ADD", UtGen.AC, UtGen.AC, UtGen.AC1, "identificador array: calcular direccion");
-			UtGen.emitirRM("LD", UtGen.AC, 0, UtGen.AC, "identificador array: cargar valor");
-		} else {
-			// Acceso normal a variable
+		if(n.getDesplazamiento() == null) {
 			UtGen.emitirRM("LD", UtGen.AC, direccion, UtGen.GP, "cargar valor de identificador: "+n.getNombre());
 		}
-		
+		else{
+			UtGen.emitirRM("LDC", UtGen.AC1, direccion, 0, "cargo direccion base en registro AC1");
+			generar(n.getDesplazamiento());
+			UtGen.emitirRO("ADD", UtGen.AC1, UtGen.AC, UtGen.AC1, "calculo direccion real");
+			UtGen.emitirRM("LD", UtGen.AC, 0, UtGen.AC1, "cargar valor de identificador con desplazamiento: "+n.getNombre());
+		}
 		if(UtGen.debug)	UtGen.emitirComentario("<- identificador");
 	}
 
