@@ -49,7 +49,7 @@ token ID
 token SEMI
 token ID
 	 error en sentencia
-Error sintáctico en sentencia
+Error sintÃ¡ctico en sentencia
 	 secuencia sentencias
 	 declaracion variable local
 	 secuencia sentencias sin punto y coma
@@ -187,6 +187,6 @@ Variable: x -> Direccion: 0
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
 
-Generando archivo de código objeto: ejemplo_generado/ejemplo_funcion.tm
-Generando código objeto en archivo: ejemplo_generado/ejemplo_funcion.tm
+Generando archivo de cÃ³digo objeto: ejemplo_generado/ejemplo_funcion.tm
+Generando cÃ³digo objeto en archivo: ejemplo_generado/ejemplo_funcion.tm
 Archivo ejemplo_generado/ejemplo_funcion.tm generado exitosamente.

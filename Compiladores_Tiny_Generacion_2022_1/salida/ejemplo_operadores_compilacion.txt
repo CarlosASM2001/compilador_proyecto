@@ -208,7 +208,7 @@ token END
 Syntax error
 instead expected token classes are [error, IF, REPEAT, READ, WRITE, RETURN, CALL, VAR, FOR, BREAK, CONTINUE, ID]
 	 error en sentencia
-Error sintáctico en sentencia
+Error sintÃ¡ctico en sentencia
 	 secuencia sentencias
 	 programa principal
 	 regla programa solo main
@@ -572,6 +572,6 @@ Variable: y -> Direccion: 1
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
 
-Generando archivo de código objeto: ejemplo_generado/ejemplo_operadores.tm
-Generando código objeto en archivo: ejemplo_generado/ejemplo_operadores.tm
+Generando archivo de cÃ³digo objeto: ejemplo_generado/ejemplo_operadores.tm
+Generando cÃ³digo objeto en archivo: ejemplo_generado/ejemplo_operadores.tm
 Archivo ejemplo_generado/ejemplo_operadores.tm generado exitosamente.

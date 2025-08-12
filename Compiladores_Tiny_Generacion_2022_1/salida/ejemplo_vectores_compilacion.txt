@@ -14,7 +14,7 @@ token VAR
 token ID
 token SEMI
 	 error en sentencia
-Error sintáctico en sentencia
+Error sintÃ¡ctico en sentencia
 	 sentencia unica
 token VAR
 	 declaracion variable local
@@ -48,7 +48,7 @@ token ID
 token ASSIGN
 token ID
 	 error en sentencia
-Error sintáctico en sentencia
+Error sintÃ¡ctico en sentencia
 	 sentencia unica
 token PLUS
 	 identificador
@@ -424,6 +424,6 @@ Variable: i -> Direccion: 2
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
 
-Generando archivo de código objeto: ejemplo_generado/ejemplo_vectores.tm
-Generando código objeto en archivo: ejemplo_generado/ejemplo_vectores.tm
+Generando archivo de cÃ³digo objeto: ejemplo_generado/ejemplo_vectores.tm
+Generando cÃ³digo objeto en archivo: ejemplo_generado/ejemplo_vectores.tm
 Archivo ejemplo_generado/ejemplo_vectores.tm generado exitosamente.
