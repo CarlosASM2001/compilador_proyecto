@@ -1,0 +1,46 @@
+{Prueba completa de funciones con variables globales y locales}
+
+global contador;
+global resultado;
+
+function factorial(n)
+begin
+    var temp;
+    contador := contador + 1; {Incrementa variable global}
+    
+    if n <= 1 then
+        temp := 1
+    else
+        temp := n * call factorial(n - 1)
+    end;
+    
+    return temp
+end
+
+function sumar(a, b)
+begin
+    var suma;
+    suma := a + b;
+    contador := contador + 1;
+    return suma
+end
+
+begin
+    var x;
+    var y;
+    
+    {Inicializar contador global}
+    contador := 0;
+    
+    {Prueba factorial}
+    read x;
+    resultado := call factorial(x);
+    write resultado;
+    write contador; {Muestra cuántas veces se llamó factorial}
+    
+    {Prueba suma}
+    read y;
+    resultado := call sumar(x, y);
+    write resultado;
+    write contador {Debe ser contador anterior + 1}
+end

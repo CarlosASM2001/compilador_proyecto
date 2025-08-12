@@ -2,18 +2,19 @@
 
 global x;
 
+function duplicar(num)
+begin
+    var temp;
+    temp := num * 2;
+    x := x + 1; {Modifica variable global}
+    return temp
+end
+
 begin
     var resultado;
     x := 5;
     resultado := call duplicar(x);
     write resultado;
-end
-
-function duplicar(num)
-begin
-    var temp;
-    temp := num * 2;
-    x := x + 1; // Modifica variable global
-    return temp
+    write x {Debe mostrar 6 porque se incrementó en la función}
 end
 
