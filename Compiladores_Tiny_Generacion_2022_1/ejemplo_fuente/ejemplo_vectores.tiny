@@ -1,11 +1,11 @@
 {Ejemplo simple de vectores}
 
-global val : array[5];
-global menor;
-global suma;
-global i;
-
 begin
+    var val : array[5];
+    var menor;
+    var suma;
+    var i;
+    
     i := 0;
     repeat
         read val[i];

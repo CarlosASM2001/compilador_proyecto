@@ -1,12 +1,12 @@
 {Ejemplo simple de operadores}
 
-global x;
-global y;
-global res;
-global a;
-global b;
-
 begin
+    var x;
+    var y;
+    var res;
+    var a;
+    var b;
+    
     repeat
         read x;
         read y;
