@@ -1,3 +1,207 @@
+token COMENTARIO
+token BEGIN
+token VAR
+token ID
+token COLON
+token ARRAY
+token LBRACKET
+token NUM
+token RBRACKET
+token SEMI
+token VAR
+	 declaracion variable local array
+	 sentencia unica
+token ID
+token SEMI
+token VAR
+	 declaracion variable local
+	 secuencia sentencias sin punto y coma
+token ID
+token SEMI
+token VAR
+	 declaracion variable local
+	 secuencia sentencias sin punto y coma
+token ID
+token SEMI
+token ID
+	 declaracion variable local
+	 secuencia sentencias sin punto y coma
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion variable
+	 secuencia sentencias sin punto y coma
+token REPEAT
+token READ
+token ID
+token LBRACKET
+Syntax error
+instead expected token classes are [error, IF, REPEAT, UNTIL, READ, WRITE, RETURN, CALL, VAR, FOR, BREAK, CONTINUE, SEMI, ID]
+token ID
+token RBRACKET
+token SEMI
+token ID
+token ASSIGN
+token ID
+	 error en sentencia
+Error sintáctico en sentencia
+	 sentencia unica
+token PLUS
+	 identificador
+token NUM
+token UNTIL
+	 numero entero
+	 suma
+	 asignacion variable
+	 secuencia sentencias
+token ID
+token EQ
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 operacion igual
+	 repeat-until
+	 secuencia sentencias
+token ID
+token ASSIGN
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token PLUS
+	 acceso array
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token PLUS
+	 acceso array
+	 suma
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token PLUS
+	 acceso array
+	 suma
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token PLUS
+	 acceso array
+	 suma
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token SEMI
+	 acceso array
+	 suma
+	 asignacion variable
+	 secuencia sentencias
+token ID
+token ASSIGN
+token ID
+token LBRACKET
+token NUM
+token RBRACKET
+	 numero entero
+token SEMI
+	 acceso array
+	 asignacion variable
+	 secuencia sentencias
+token ID
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion variable
+	 secuencia sentencias
+token REPEAT
+token IF
+token ID
+token LBRACKET
+token ID
+token RBRACKET
+	 identificador
+token LT
+	 acceso array
+token ID
+token THEN
+	 identificador
+	 operacion menor
+token ID
+token ASSIGN
+token ID
+token LBRACKET
+token ID
+token RBRACKET
+	 identificador
+token END
+	 acceso array
+	 asignacion variable
+	 sentencia unica
+token SEMI
+	 if simple
+	 sentencia unica
+token ID
+token ASSIGN
+token ID
+token PLUS
+	 identificador
+token NUM
+token UNTIL
+	 numero entero
+	 suma
+	 asignacion variable
+	 secuencia sentencias
+token ID
+token EQ
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 operacion igual
+	 repeat-until
+	 secuencia sentencias
+token WRITE
+token ID
+token SEMI
+	 identificador
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token END
+	 identificador
+	 write expresion
+	 secuencia sentencias
+	 programa principal
+	 regla programa solo main
+
+IMPRESION DEL AST GENERADO
+
+  Tipo de nodo desconocido
+Array val ocupa 5 posiciones de memoria
+*** Tabla de Simbolos ***
+Total de posiciones de memoria utilizadas: 8
+Variable: val -> Direccion: 0
+Variable: suma -> Direccion: 6
+Variable: menor -> Direccion: 5
+Variable: i -> Direccion: 7
+
+
+------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+
 * * Compilacion TINY para la maquina TM
 * * Prefacio estandar
 0:      LDC       5,0(0)        init: GP = 0
@@ -217,3 +421,10 @@
 * <- programa
 * Fin de la ejecucion.
 97:     HALT      0,0,0         
+
+
+------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+Generando archivo de código objeto: ejemplo_generado/ejemplo_vectores.tm
+Generando código objeto en archivo: ejemplo_generado/ejemplo_vectores.tm
+Archivo ejemplo_generado/ejemplo_vectores.tm generado exitosamente.

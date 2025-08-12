@@ -1,0 +1,10 @@
+begin
+    var x;
+    var y;
+    
+    read x;
+    read y;
+    
+    write x + y;
+    write x * y
+end
