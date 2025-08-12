@@ -1,3 +1,3 @@
 @echo off
-tiny64.exe programa_extendido.tm
+tiny64.exe ejemplo_operadores.tm
 pause
