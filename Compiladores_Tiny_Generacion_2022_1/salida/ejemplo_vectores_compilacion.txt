@@ -372,55 +372,54 @@ Variable: i -> Direccion: 7
 * <- identificador
 75:     ST        0,5(5)        asignacion: almaceno el valor para el id menor
 * <- asignacion
-* If: el salto hacia el final debe estar aqui
-71:     JEQ       0,5(7)        if: jmp hacia else
+71:     JEQ       0,4(7)        if: jmp hacia el final
 * <- if
 * -> asignacion
 * -> Operacion: mas
 * -> identificador
-77:     LD        0,7(5)        cargar id: val[i]
+76:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
-78:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+77:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-79:     LDC       0,1(0)        cargar constante: 1
+78:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-80:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-81:     ADD       0,1,0         op: +
+79:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+80:     ADD       0,1,0         op: +
 * <- Operacion: mas
-82:     ST        0,7(5)        asignacion: almaceno el valor para el id i
+81:     ST        0,7(5)        asignacion: almaceno el valor para el id i
 * <- asignacion
 * -> Operacion: igual
 * -> identificador
-83:     LD        0,7(5)        cargar id: val[i]
+82:     LD        0,7(5)        cargar id: val[i]
 * <- identificador
-84:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+83:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-85:     LDC       0,5(0)        cargar constante: 5
+84:     LDC       0,5(0)        cargar constante: 5
 * <- constante
-86:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-87:     SUB       0,1,0         op: ==
-88:     JEQ       0,2(7)        voy dos instrucciones mas alla if verdadero (AC==0)
-89:     LDC       0,0(0)        caso de falso (AC=0)
-90:     LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
-91:     LDC       0,1(0)        caso de verdadero (AC=1)
+85:     LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+86:     SUB       0,1,0         op: ==
+87:     JEQ       0,2(7)        voy dos instrucciones mas alla if verdadero (AC==0)
+88:     LDC       0,0(0)        caso de falso (AC=0)
+89:     LDA       7,1(7)        Salto incodicional a direccion: PC+1 (es falso evito colocarlo verdadero)
+90:     LDC       0,1(0)        caso de verdadero (AC=1)
 * <- Operacion: igual
-92:     JEQ       0,-33(7)      repeat: jmp hacia el inicio del cuerpo
+91:     JEQ       0,-32(7)      repeat: jmp hacia el inicio del cuerpo
 * <- repeat
 * -> escribir
 * -> identificador
-93:     LD        0,6(5)        cargar id: val[suma]
+92:     LD        0,6(5)        cargar id: val[suma]
 * <- identificador
-94:     OUT       0,0,0         escribir: genero la salida de la expresion
+93:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> escribir
 * -> identificador
-95:     LD        0,5(5)        cargar id: val[menor]
+94:     LD        0,5(5)        cargar id: val[menor]
 * <- identificador
-96:     OUT       0,0,0         escribir: genero la salida de la expresion
+95:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * <- programa
 * Fin de la ejecucion.
-97:     HALT      0,0,0         
+96:     HALT      0,0,0         
 
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------

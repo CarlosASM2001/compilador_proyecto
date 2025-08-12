@@ -488,20 +488,27 @@ public class Generador {
 		UtGen.emitirComentario("If: el salto hacia el else debe estar aqui");
 		/*Genero la parte THEN*/
 		generar(n.getParteThen());
-		localidadSaltoEnd = UtGen.emitirSalto(1);
-		UtGen.emitirComentario("If: el salto hacia el final debe estar aqui");
-		localidadActual = UtGen.emitirSalto(0);
-		UtGen.cargarRespaldo(localidadSaltoElse);
-		UtGen.emitirRM_Abs("JEQ", UtGen.AC, localidadActual, "if: jmp hacia else");
-		UtGen.restaurarRespaldo();
+		
 		/*Genero la parte ELSE*/
 		if(n.getParteElse()!=null){
+			localidadSaltoEnd = UtGen.emitirSalto(1);
+			UtGen.emitirComentario("If: el salto hacia el final debe estar aqui");
+			localidadActual = UtGen.emitirSalto(0);
+			UtGen.cargarRespaldo(localidadSaltoElse);
+			UtGen.emitirRM_Abs("JEQ", UtGen.AC, localidadActual, "if: jmp hacia else");
+			UtGen.restaurarRespaldo();
 			generar(n.getParteElse());
 			localidadActual = UtGen.emitirSalto(0);
 			UtGen.cargarRespaldo(localidadSaltoEnd);
 			UtGen.emitirRM_Abs("LDA", UtGen.PC, localidadActual, "if: jmp hacia el final");
 			UtGen.restaurarRespaldo();
-    	}
+    	} else {
+			// Si no hay else, solo necesitamos completar el salto
+			localidadActual = UtGen.emitirSalto(0);
+			UtGen.cargarRespaldo(localidadSaltoElse);
+			UtGen.emitirRM_Abs("JEQ", UtGen.AC, localidadActual, "if: jmp hacia el final");
+			UtGen.restaurarRespaldo();
+		}
 		
 		if(UtGen.debug)	UtGen.emitirComentario("<- if");
 	}

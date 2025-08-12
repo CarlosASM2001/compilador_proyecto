@@ -2,9 +2,51 @@ token COMENTARIO
 token GLOBAL
 token ID
 token SEMI
-token BEGIN
+token FUNCTION
 	 declaracion global variable
 	 declaracion unica
+token ID
+token LPAREN
+token ID
+token RPAREN
+token BEGIN
+token VAR
+token ID
+token SEMI
+token ID
+	 declaracion variable local
+	 sentencia unica
+token ASSIGN
+token ID
+token TIMES
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 multiplicacion
+	 asignacion variable
+	 secuencia sentencias sin punto y coma
+token ID
+token ASSIGN
+token ID
+token PLUS
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 suma
+	 asignacion variable
+	 secuencia sentencias
+token COMENTARIO
+token RETURN
+token ID
+token END
+	 identificador
+	 return con valor
+	 secuencia sentencias
+token BEGIN
+	 declaracion funcion con parametros
+	 secuencia declaraciones
 token VAR
 token ID
 token SEMI
@@ -35,51 +77,12 @@ token SEMI
 	 identificador
 	 write expresion
 	 secuencia sentencias
-token END
-Syntax error
-instead expected token classes are [error, IF, REPEAT, READ, WRITE, RETURN, CALL, VAR, FOR, BREAK, CONTINUE, ID]
-token FUNCTION
+token WRITE
 token ID
-token LPAREN
-token ID
-token RPAREN
-token BEGIN
-token VAR
-token ID
-token SEMI
-token ID
-	 error en sentencia
-Error sintáctico en sentencia
-	 secuencia sentencias
-	 declaracion variable local
-	 secuencia sentencias sin punto y coma
-token ASSIGN
-token ID
-token TIMES
-	 identificador
-token NUM
-token SEMI
-	 numero entero
-	 multiplicacion
-	 asignacion variable
-	 secuencia sentencias sin punto y coma
-token ID
-token ASSIGN
-token ID
-token PLUS
-	 identificador
-token NUM
-token SEMI
-	 numero entero
-	 suma
-	 asignacion variable
-	 secuencia sentencias
-token COMENTARIO_LINEA
-token RETURN
-token ID
+token COMENTARIO
 token END
 	 identificador
-	 return con valor
+	 write expresion
 	 secuencia sentencias
 	 programa principal
 	 regla programa completo
@@ -88,11 +91,12 @@ IMPRESION DEL AST GENERADO
 
   Tipo de nodo desconocido
 *** Tabla de Simbolos ***
-Total de posiciones de memoria utilizadas: 4
-Variable: temp -> Direccion: 2
-Variable: resultado -> Direccion: 1
-Variable: num -> Direccion: 3
+Total de posiciones de memoria utilizadas: 5
+Variable: temp -> Direccion: 3
+Variable: resultado -> Direccion: 4
+Variable: num -> Direccion: 2
 Variable: x -> Direccion: 0
+Variable: duplicar -> Direccion: 1
 
 
 ------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
@@ -109,10 +113,11 @@ Variable: x -> Direccion: 0
 2:      LDC       0,0(0)        global: inicializar variable x a cero
 3:      ST        0,0(5)        global: almacenar en direccion 0
 * <- declaracion
+* registrada funcion: duplicar
 * -> declaracion: resultado
 * Declaracion de variable: resultado (local)
 4:      LDC       0,0(0)        local: inicializar variable resultado a cero
-5:      ST        0,1(5)        local: almacenar en direccion 1
+5:      ST        0,4(5)        local: almacenar en direccion 4
 * <- declaracion
 * -> asignacion
 * -> constante
@@ -129,60 +134,74 @@ Variable: x -> Direccion: 0
 9:      ST        0,0(6)        call: guardar argumento
 10:     LDA       0,3(7)        call: calcular return addr (PC+3)
 11:     ST        0,-1(6)       call: push return addr
-* ERROR: llamada a funcion no definida: duplicar
-12:     LDA       7,0(7)        call: salto a funcion duplicar
-* <- llamada funcion
-13:     ST        0,1(5)        asignacion: almaceno el valor para el id resultado
-* <- asignacion
-* -> escribir
-* -> identificador
-14:     LD        0,1(5)        cargar id: val[resultado]
-* <- identificador
-15:     OUT       0,0,0         escribir: genero la salida de la expresion
-* <- escribir
+13:     LD        1,-1(6)       prologo: cargar RA de -(numArgs)(MP)
+14:     ST        1,0(6)        prologo: colocar RA en 0(MP)
+15:     LD        0,0(6)        prologo: cargar arg num
+16:     ST        0,2(5)        prologo: guardar param num
+* === INICIO FUNCION duplicar ===
 * -> declaracion: temp
 * Declaracion de variable: temp (local)
-16:     LDC       0,0(0)        local: inicializar variable temp a cero
-17:     ST        0,2(5)        local: almacenar en direccion 2
+17:     LDC       0,0(0)        local: inicializar variable temp a cero
+18:     ST        0,3(5)        local: almacenar en direccion 3
 * <- declaracion
 * -> asignacion
 * -> Operacion: por
 * -> identificador
-18:     LD        0,3(5)        cargar id: val[num]
+19:     LD        0,2(5)        cargar id: val[num]
 * <- identificador
-19:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+20:     ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-20:     LDC       0,2(0)        cargar constante: 2
+21:     LDC       0,2(0)        cargar constante: 2
 * <- constante
-21:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-22:     MUL       0,1,0         op: *
+22:     LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+23:     MUL       0,1,0         op: *
 * <- Operacion: por
-23:     ST        0,2(5)        asignacion: almaceno el valor para el id temp
+24:     ST        0,3(5)        asignacion: almaceno el valor para el id temp
 * <- asignacion
 * -> asignacion
 * -> Operacion: mas
 * -> identificador
-24:     LD        0,0(5)        cargar id: val[x]
+25:     LD        0,0(5)        cargar id: val[x]
 * <- identificador
-25:     ST        0,-1(6)       op: push en la pila tmp el resultado expresion izquierda
+26:     ST        0,-2(6)       op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-26:     LDC       0,1(0)        cargar constante: 1
+27:     LDC       0,1(0)        cargar constante: 1
 * <- constante
-27:     LD        1,-1(6)       op: pop o cargo de la pila el valor izquierdo en AC1
-28:     ADD       0,1,0         op: +
+28:     LD        1,-2(6)       op: pop o cargo de la pila el valor izquierdo en AC1
+29:     ADD       0,1,0         op: +
 * <- Operacion: mas
-29:     ST        0,0(5)        asignacion: almaceno el valor para el id x
+30:     ST        0,0(5)        asignacion: almaceno el valor para el id x
 * <- asignacion
 * -> return
 * -> identificador
-30:     LD        0,2(5)        cargar id: val[temp]
+31:     LD        0,3(5)        cargar id: val[temp]
 * <- identificador
-31:     LD        1,0(6)        return: recuperar direccion de retorno
-32:     LDA       7,0(1)        return: salto a direccion de retorno
+32:     LD        1,0(6)        return: recuperar direccion de retorno
+33:     LDA       7,0(1)        return: salto a direccion de retorno
 * <- return
+* Return implicito de funcion
+34:     LD        1,0(6)        funcion: recuperar direccion de retorno
+35:     LDA       7,0(1)        funcion: retorno
+* === FIN FUNCION duplicar ===
+12:     LDA       7,0(7)        call: salto a funcion duplicar
+* <- llamada funcion
+36:     ST        0,4(5)        asignacion: almaceno el valor para el id resultado
+* <- asignacion
+* -> escribir
+* -> identificador
+37:     LD        0,4(5)        cargar id: val[resultado]
+* <- identificador
+38:     OUT       0,0,0         escribir: genero la salida de la expresion
+* <- escribir
+* -> escribir
+* -> identificador
+39:     LD        0,0(5)        cargar id: val[x]
+* <- identificador
+40:     OUT       0,0,0         escribir: genero la salida de la expresion
+* <- escribir
 * <- programa
 * Fin de la ejecucion.
-33:     HALT      0,0,0         
+41:     HALT      0,0,0         
 
 
 ------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------

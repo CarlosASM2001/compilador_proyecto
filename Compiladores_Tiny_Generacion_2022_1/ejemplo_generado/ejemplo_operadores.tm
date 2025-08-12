@@ -195,147 +195,146 @@
 * <- Operacion: entre
 97:     OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
-* If: el salto hacia el final debe estar aqui
-91:     JEQ       0,7(7)        if: jmp hacia else
+91:     JEQ       0,6(7)        if: jmp hacia el final
 * <- if
 * -> escribir
 * -> Operacion: modulo
 * -> identificador
-99:     LD        0,0(5)        cargar id: val[x]
+98:     LD        0,0(5)        cargar id: val[x]
 * <- identificador
-100:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+99:     ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-101:    LD        0,1(5)        cargar id: val[y]
+100:    LD        0,1(5)        cargar id: val[y]
 * <- identificador
-102:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-103:    ST        0,0(6)        mod: guardar b
-104:    ST        1,-1(6)       mod: guardar a
-105:    DIV       0,1,0         mod: a/b
-106:    LD        1,-1(6)       mod: recuperar a
-107:    LD        2,0(6)        mod: recuperar b en r2
-108:    MUL       0,0,2         mod: (a/b)*b
-109:    SUB       0,1,0         mod: a - (a/b)*b
+101:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+102:    ST        0,0(6)        mod: guardar b
+103:    ST        1,-1(6)       mod: guardar a
+104:    DIV       0,1,0         mod: a/b
+105:    LD        1,-1(6)       mod: recuperar a
+106:    LD        2,0(6)        mod: recuperar b en r2
+107:    MUL       0,0,2         mod: (a/b)*b
+108:    SUB       0,1,0         mod: a - (a/b)*b
 * <- Operacion: modulo
-110:    OUT       0,0,0         escribir: genero la salida de la expresion
+109:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> escribir
 * -> Operacion: potencia
 * -> identificador
-111:    LD        0,0(5)        cargar id: val[x]
+110:    LD        0,0(5)        cargar id: val[x]
 * <- identificador
-112:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+111:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> constante
-113:    LDC       0,2(0)        cargar constante: 2
+112:    LDC       0,2(0)        cargar constante: 2
 * <- constante
-114:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-115:    ST        0,0(6)        pow: guardar exp
-116:    ST        1,-1(6)       pow: guardar base
-117:    LDC       0,1(0)        pow: inicializar resultado = 1
-118:    ST        0,-2(6)       pow: guardar res
+113:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+114:    ST        0,0(6)        pow: guardar exp
+115:    ST        1,-1(6)       pow: guardar base
+116:    LDC       0,1(0)        pow: inicializar resultado = 1
+117:    ST        0,-2(6)       pow: guardar res
 * pow: inicio bucle
-119:    LD        0,0(6)        pow: cargar exp
+118:    LD        0,0(6)        pow: cargar exp
 * pow: salto condicional a fin (exp==0)
-121:    LD        0,-2(6)       pow: cargar res
-122:    LD        1,-1(6)       pow: cargar base
-123:    MUL       0,1,0         pow: res = res * base
-124:    ST        0,-2(6)       pow: guardar res
-125:    LD        1,0(6)        pow: cargar exp en AC1
-126:    LDC       0,1(0)        pow: cargar 1
-127:    SUB       0,1,0         pow: exp - 1
-128:    ST        0,0(6)        pow: guardar exp
-129:    LDA       7,-11(7)      pow: repetir
-120:    JEQ       0,9(7)        pow: salir si exp == 0
-130:    LD        0,-2(6)       pow: cargar resultado
-131:    LD        1,-2(6)       pow: pop res
-132:    LD        1,-1(6)       pow: pop base
-133:    LD        1,0(6)        pow: pop exp
+120:    LD        0,-2(6)       pow: cargar res
+121:    LD        1,-1(6)       pow: cargar base
+122:    MUL       0,1,0         pow: res = res * base
+123:    ST        0,-2(6)       pow: guardar res
+124:    LD        1,0(6)        pow: cargar exp en AC1
+125:    LDC       0,1(0)        pow: cargar 1
+126:    SUB       0,1,0         pow: exp - 1
+127:    ST        0,0(6)        pow: guardar exp
+128:    LDA       7,-11(7)      pow: repetir
+119:    JEQ       0,9(7)        pow: salir si exp == 0
+129:    LD        0,-2(6)       pow: cargar resultado
+130:    LD        1,-2(6)       pow: pop res
+131:    LD        1,-1(6)       pow: pop base
+132:    LD        1,0(6)        pow: pop exp
 * <- Operacion: potencia
-134:    OUT       0,0,0         escribir: genero la salida de la expresion
+133:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> asignacion
 * -> Operacion: menorigual
 * -> identificador
-135:    LD        0,0(5)        cargar id: val[x]
+134:    LD        0,0(5)        cargar id: val[x]
 * <- identificador
-136:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+135:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-137:    LD        0,1(5)        cargar id: val[y]
+136:    LD        0,1(5)        cargar id: val[y]
 * <- identificador
-138:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-139:    SUB       0,1,0         op: <=
-140:    JLE       0,2(7)        saltar si AC<=0
-141:    LDC       0,0(0)        caso falso
-142:    LDA       7,1(7)        saltar caso verdadero
-143:    LDC       0,1(0)        caso verdadero
+137:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+138:    SUB       0,1,0         op: <=
+139:    JLE       0,2(7)        saltar si AC<=0
+140:    LDC       0,0(0)        caso falso
+141:    LDA       7,1(7)        saltar caso verdadero
+142:    LDC       0,1(0)        caso verdadero
 * <- Operacion: menorigual
-144:    ST        0,2(5)        asignacion: almaceno el valor para el id a
+143:    ST        0,2(5)        asignacion: almaceno el valor para el id a
 * <- asignacion
 * -> asignacion
 * -> Operacion: mayorigual
 * -> identificador
-145:    LD        0,0(5)        cargar id: val[x]
+144:    LD        0,0(5)        cargar id: val[x]
 * <- identificador
-146:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+145:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-147:    LD        0,1(5)        cargar id: val[y]
+146:    LD        0,1(5)        cargar id: val[y]
 * <- identificador
-148:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-149:    SUB       0,1,0         op: >=
-150:    JGE       0,2(7)        saltar si AC>=0
-151:    LDC       0,0(0)        caso falso
-152:    LDA       7,1(7)        saltar caso verdadero
-153:    LDC       0,1(0)        caso verdadero
+147:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+148:    SUB       0,1,0         op: >=
+149:    JGE       0,2(7)        saltar si AC>=0
+150:    LDC       0,0(0)        caso falso
+151:    LDA       7,1(7)        saltar caso verdadero
+152:    LDC       0,1(0)        caso verdadero
 * <- Operacion: mayorigual
-154:    ST        0,3(5)        asignacion: almaceno el valor para el id b
+153:    ST        0,3(5)        asignacion: almaceno el valor para el id b
 * <- asignacion
 * -> escribir
 * -> Operacion: and
 * -> identificador
-155:    LD        0,2(5)        cargar id: val[a]
+154:    LD        0,2(5)        cargar id: val[a]
 * <- identificador
-156:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+155:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-157:    LD        0,3(5)        cargar id: val[b]
+156:    LD        0,3(5)        cargar id: val[b]
 * <- identificador
-158:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-159:    JEQ       1,3(7)        and: si izquierdo es falso, resultado es falso
-160:    JEQ       0,2(7)        and: si derecho es falso, resultado es falso
-161:    LDC       0,1(0)        and: ambos verdaderos
-162:    LDA       7,1(7)        and: saltar caso falso
-163:    LDC       0,0(0)        and: resultado falso
+157:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+158:    JEQ       1,3(7)        and: si izquierdo es falso, resultado es falso
+159:    JEQ       0,2(7)        and: si derecho es falso, resultado es falso
+160:    LDC       0,1(0)        and: ambos verdaderos
+161:    LDA       7,1(7)        and: saltar caso falso
+162:    LDC       0,0(0)        and: resultado falso
 * <- Operacion: and
-164:    OUT       0,0,0         escribir: genero la salida de la expresion
+163:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> escribir
 * -> Operacion: or
 * -> identificador
-165:    LD        0,2(5)        cargar id: val[a]
+164:    LD        0,2(5)        cargar id: val[a]
 * <- identificador
-166:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
+165:    ST        0,0(6)        op: push en la pila tmp el resultado expresion izquierda
 * -> identificador
-167:    LD        0,3(5)        cargar id: val[b]
+166:    LD        0,3(5)        cargar id: val[b]
 * <- identificador
-168:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
-169:    JNE       1,3(7)        or: si izquierdo es verdadero, resultado es verdadero
-170:    JNE       0,2(7)        or: si derecho es verdadero, resultado es verdadero
-171:    LDC       0,0(0)        or: ambos falsos
-172:    LDA       7,1(7)        or: saltar caso verdadero
-173:    LDC       0,1(0)        or: resultado verdadero
+167:    LD        1,0(6)        op: pop o cargo de la pila el valor izquierdo en AC1
+168:    JNE       1,3(7)        or: si izquierdo es verdadero, resultado es verdadero
+169:    JNE       0,2(7)        or: si derecho es verdadero, resultado es verdadero
+170:    LDC       0,0(0)        or: ambos falsos
+171:    LDA       7,1(7)        or: saltar caso verdadero
+172:    LDC       0,1(0)        or: resultado verdadero
 * <- Operacion: or
-174:    OUT       0,0,0         escribir: genero la salida de la expresion
+173:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * -> escribir
 * -> Operacion: not
 * -> identificador
-175:    LD        0,2(5)        cargar id: val[a]
+174:    LD        0,2(5)        cargar id: val[a]
 * <- identificador
-176:    JEQ       0,2(7)        not: saltar si es cero (falso)
-177:    LDC       0,0(0)        not: resultado falso
-178:    LDA       7,1(7)        not: saltar carga de verdadero
-179:    LDC       0,1(0)        not: resultado verdadero
+175:    JEQ       0,2(7)        not: saltar si es cero (falso)
+176:    LDC       0,0(0)        not: resultado falso
+177:    LDA       7,1(7)        not: saltar carga de verdadero
+178:    LDC       0,1(0)        not: resultado verdadero
 * <- Operacion: not
-180:    OUT       0,0,0         escribir: genero la salida de la expresion
+179:    OUT       0,0,0         escribir: genero la salida de la expresion
 * <- escribir
 * <- programa
 * Fin de la ejecucion.
-181:    HALT      0,0,0         
+180:    HALT      0,0,0         
