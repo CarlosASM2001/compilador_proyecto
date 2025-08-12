@@ -1,3 +1,107 @@
+token COMENTARIO
+token GLOBAL
+token ID
+token SEMI
+token FUNCTION
+	 declaracion global variable
+	 declaracion unica
+token ID
+token LPAREN
+token ID
+token RPAREN
+token BEGIN
+token VAR
+token ID
+token SEMI
+token ID
+	 declaracion variable local
+	 sentencia unica
+token ASSIGN
+token ID
+token TIMES
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 multiplicacion
+	 asignacion variable
+	 secuencia sentencias sin punto y coma
+token ID
+token ASSIGN
+token ID
+token PLUS
+	 identificador
+token NUM
+token SEMI
+	 numero entero
+	 suma
+	 asignacion variable
+	 secuencia sentencias
+token COMENTARIO
+token RETURN
+token ID
+token END
+	 identificador
+	 return con valor
+	 secuencia sentencias
+token BEGIN
+	 declaracion funcion con parametros
+	 secuencia declaraciones
+token VAR
+token ID
+token SEMI
+token ID
+	 declaracion variable local
+	 sentencia unica
+token ASSIGN
+token NUM
+token SEMI
+	 numero entero
+	 asignacion variable
+	 secuencia sentencias sin punto y coma
+token ID
+token ASSIGN
+token CALL
+token ID
+token LPAREN
+token ID
+token RPAREN
+	 identificador
+token SEMI
+	 llamada funcion en expresion
+	 asignacion variable
+	 secuencia sentencias
+token WRITE
+token ID
+token SEMI
+	 identificador
+	 write expresion
+	 secuencia sentencias
+token WRITE
+token ID
+token COMENTARIO
+token END
+	 identificador
+	 write expresion
+	 secuencia sentencias
+	 programa principal
+	 regla programa completo
+
+IMPRESION DEL AST GENERADO
+
+  Tipo de nodo desconocido
+*** Tabla de Simbolos ***
+Total de posiciones de memoria utilizadas: 5
+Variable: temp -> Direccion: 3
+Variable: resultado -> Direccion: 4
+Variable: num -> Direccion: 2
+Variable: x -> Direccion: 0
+Variable: duplicar -> Direccion: 1
+
+
+------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+
 * * Compilacion TINY para la maquina TM
 * * Prefacio estandar
 0:      LDC       5,0(0)        init: GP = 0
@@ -52,7 +156,6 @@
 * Return implicito al final de la funcion
 20:     LD        7,0(1)        return: salto usando direccion en AC1
 * <- funcion: duplicar
-4:      LDA       7,16(7)       completar salto al main
 * -> declaracion: resultado
 * Declaracion de variable: resultado (local)
 21:     LDC       0,0(0)        local: inicializar variable resultado a cero
@@ -90,3 +193,10 @@
 * Fin del programa principal
 34:     HALT      0,0,0         
 * <- programa
+
+
+------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------
+
+Generando archivo de código objeto: ejemplo_generado/ejemplo_funcion.tm
+Generando código objeto en archivo: ejemplo_generado/ejemplo_funcion.tm
+Archivo ejemplo_generado/ejemplo_funcion.tm generado exitosamente.

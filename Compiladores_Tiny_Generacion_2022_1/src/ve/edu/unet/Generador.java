@@ -49,12 +49,23 @@ public class Generador {
     private static final Map<String, NodoFuncion> funcionesRegistradas = new HashMap<>();
     private static final Map<String, Integer> inicioFuncion = new HashMap<>();
     private static final Set<String> funcionesEmitidas = new HashSet<>();
+    
+    // Variables para el salto al main
+    private static int saltoAlMain = -1;
+    private static boolean saltoPrincipalEmitido = false;
 	
 	public static void setTablaSimbolos(TablaSimbolos tabla){
 		tablaSimbolos = tabla;
 	}
 	
 	public static void generarCodigoObjeto(NodoBase raiz){
+		// Resetear variables estáticas
+		saltoPrincipalEmitido = false;
+		saltoAlMain = -1;
+		funcionesRegistradas.clear();
+		inicioFuncion.clear();
+		funcionesEmitidas.clear();
+		
 		System.out.println();
 		System.out.println();
 		System.out.println("------ CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
@@ -62,9 +73,6 @@ public class Generador {
 		System.out.println();
 		generarPreludioEstandar();
 		generar(raiz);
-		/*Genero el codigo de finalizacion de ejecucion del codigo*/   
-		UtGen.emitirComentario("Fin de la ejecucion.");
-		UtGen.emitirRO("HALT", 0, 0, 0, "");
 		System.out.println();
 		System.out.println();
 		System.out.println("------ FIN DEL CODIGO OBJETO DEL LENGUAJE TINY GENERADO PARA LA TM ------");
@@ -81,9 +89,6 @@ public class Generador {
 			// Generar código objeto
 			generarPreludioEstandar();
 			generar(raiz);
-			/*Genero el codigo de finalizacion de ejecucion del codigo*/   
-			UtGen.emitirComentario("Fin de la ejecucion.");
-			UtGen.emitirRO("HALT", 0, 0, 0, "");
 			
 			System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
 		} finally {
@@ -149,14 +154,25 @@ public class Generador {
 			generar(n.getGlobal_block());
 		}
 		
-		// Registrar funciones (sin generar su cuerpo)
+		// Generar las funciones (el salto se emite en la primera función)
 		if(n.getFunction_block() != null){
 			generar(n.getFunction_block());
+		}
+		
+		// Completar el salto al main si se emitió
+		if(saltoPrincipalEmitido && saltoAlMain >= 0){
+			int inicioMain = UtGen.emitirSalto(0);
+			UtGen.cargarRespaldo(saltoAlMain);
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicioMain, "completar salto al main");
+			UtGen.restaurarRespaldo();
 		}
 		
 		// Generar programa principal
 		if(n.getMain() != null){
 			generar(n.getMain());
+			// Generar HALT después del main
+			UtGen.emitirComentario("Fin del programa principal");
+			UtGen.emitirRO("HALT", 0, 0, 0, "");
 		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- programa");
@@ -238,14 +254,38 @@ public class Generador {
         UtGen.emitirComentario("=== FIN FUNCION " + n.getNombre() + " ===");
     }
 
-    // Registrar función en la primera pasada (sin generar código)
+    // Generar función
     private static void registrarFuncion(NodoFuncion funcion) {
         if (funcion.getNombre() == null) {
             UtGen.emitirComentario("ADVERTENCIA: funcion sin nombre");
             return;
         }
+        
+        // Si es la primera función, emitir un salto al final de todas las funciones
+        if(funcionesRegistradas.isEmpty() && !saltoPrincipalEmitido){
+            UtGen.emitirComentario("Salto al programa principal");
+            saltoAlMain = UtGen.emitirSalto(1);
+            saltoPrincipalEmitido = true;
+        }
+        
         funcionesRegistradas.put(funcion.getNombre(), funcion);
-        UtGen.emitirComentario("registrada funcion: " + funcion.getNombre());
+        
+        // Registrar la dirección de inicio de la función
+        int direccionInicio = UtGen.emitirSalto(0);
+        inicioFuncion.put(funcion.getNombre(), direccionInicio);
+        
+        if(UtGen.debug) UtGen.emitirComentario("-> funcion: " + funcion.getNombre());
+        
+        // Generar el cuerpo de la función
+        if(funcion.getCuerpo() != null){
+            generar(funcion.getCuerpo());
+        }
+        
+        // Return implícito al final de la función
+        UtGen.emitirComentario("Return implicito al final de la funcion");
+        UtGen.emitirRM("LD", UtGen.PC, 0, UtGen.AC1, "return: salto usando direccion en AC1");
+        
+        if(UtGen.debug) UtGen.emitirComentario("<- funcion: " + funcion.getNombre());
     }
 
 	private static void generarFor(NodoBase nodo){
@@ -321,99 +361,35 @@ public class Generador {
 		NodoLlamadaFuncion n = (NodoLlamadaFuncion)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> llamada funcion: " + n.getNombreFuncion());
 		
-		// 1) Procesar argumentos si existen (se apilan primero)
-		int numArgs = 0;
+		// 1) Guardar la dirección de retorno en AC1
+		UtGen.emitirRM("LDA", UtGen.AC1, 2, UtGen.PC, "call: calcular direccion de retorno (PC+2)");
+		
+		// 2) Procesar argumentos y pasarlos a las direcciones de los parámetros
 		NodoFuncion defFuncion = funcionesRegistradas.get(n.getNombreFuncion());
-		java.util.List<NodoDeclaracion> paramsOrden = new java.util.ArrayList<>();
-		if (defFuncion != null && defFuncion.getParametros() != null) {
-			NodoBase p = defFuncion.getParametros();
-			while (p != null) {
-				if (p instanceof NodoDeclaracion) paramsOrden.add((NodoDeclaracion)p);
-				p = p.getHermanoDerecha();
-			}
-		}
-		if(n.getArgumentos() != null){
-			UtGen.emitirComentario("Procesando argumentos de la llamada");
+		if(n.getArgumentos() != null && defFuncion != null){
 			NodoBase arg = n.getArgumentos();
-			int idx = 0;
-			while(arg != null){
-				// Si el parametro esperado es array, pasar la base (direccion) del array
-				boolean pasarBaseArray = false;
-				if (idx < paramsOrden.size()) {
-					NodoDeclaracion pd = paramsOrden.get(idx);
-					pasarBaseArray = pd.isEsArray();
-				}
-				if (pasarBaseArray && arg instanceof NodoIdentificador) {
-					String nombreArg = ((NodoIdentificador)arg).getNombre();
-					int base = tablaSimbolos.getDireccion(nombreArg);
-					UtGen.emitirRM("LDC", UtGen.AC, base, 0, "call: base addr de array " + nombreArg);
-				} else {
-					generar(arg);
-				}
-				UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "call: guardar argumento");
-				numArgs++;
-				idx++;
-				arg = arg.getHermanoDerecha();
-			}
-		}
-
-		// 2) Calcular y apilar direccion de retorno: AC = PC + 3; push(AC)
-		// i: LDA AC,(PC+3); i+1: ST AC,...; i+2: LDA PC,func -> retornar a i+3
-		UtGen.emitirRM("LDA", UtGen.AC, 3, UtGen.PC, "call: calcular return addr (PC+3)");
-		UtGen.emitirRM("ST", UtGen.AC, desplazamientoTmp--, UtGen.MP, "call: push return addr");
-		
-		// Compilación diferida: emitir la función al final del código la primera vez que se use
-		Integer inicio = inicioFuncion.get(n.getNombreFuncion());
-		if (inicio == null) {
-			// Guardar posicion actual (sitio de llamada) dejando UN hueco para la instruccion de salto
-			int posLlamada = UtGen.emitirSalto(1);
-			// Ir al final del código emitido hasta ahora
-			UtGen.restaurarRespaldo();
-			// Registrar inicio de la funcion
-			inicio = UtGen.emitirSalto(0);
-			inicioFuncion.put(n.getNombreFuncion(), inicio);
-			funcionesEmitidas.add(n.getNombreFuncion());
+			NodoBase param = defFuncion.getParametros();
 			
-			// Emitir prólogo de función: copiar argumentos a parámetros y fijar RA en 0(MP)
-			if (defFuncion != null && !paramsOrden.isEmpty()) {
-				// Mover direccion de retorno a 0(MP)
-				UtGen.emitirRM("LD", UtGen.AC1, -numArgs, UtGen.MP, "prologo: cargar RA de -(numArgs)(MP)");
-				UtGen.emitirRM("ST", UtGen.AC1, 0, UtGen.MP, "prologo: colocar RA en 0(MP)");
-				// Copiar cada argumento a su slot en GP
-				for (int i = 0; i < paramsOrden.size(); i++) {
-					NodoDeclaracion pd = paramsOrden.get(i);
-					int dirParam = tablaSimbolos.getDireccion(pd.getNombreVariable());
-					int off = -i; // primer arg en 0(MP), segundo en -1(MP), etc.
-					UtGen.emitirRM("LD", UtGen.AC, off, UtGen.MP, "prologo: cargar arg " + pd.getNombreVariable());
-					UtGen.emitirRM("ST", UtGen.AC, dirParam, UtGen.GP, "prologo: guardar param " + pd.getNombreVariable());
+			while(arg != null && param != null){
+				if(param instanceof NodoDeclaracion){
+					// Generar el valor del argumento
+					generar(arg);
+					// Guardarlo en la dirección del parámetro
+					int dirParam = tablaSimbolos.getDireccion(((NodoDeclaracion)param).getNombreVariable());
+					UtGen.emitirRM("ST", UtGen.AC, dirParam, UtGen.GP, "call: guardar argumento en parametro");
 				}
+				arg = arg.getHermanoDerecha();
+				param = param.getHermanoDerecha();
 			}
-			// Emitir cuerpo de la función
-			NodoFuncion def = funcionesRegistradas.get(n.getNombreFuncion());
-			if (def == null) {
-				UtGen.emitirComentario("ERROR: llamada a funcion no definida: " + n.getNombreFuncion());
-			} else {
-				UtGen.emitirComentario("=== INICIO FUNCION " + def.getNombre() + " ===");
-				if (def.getCuerpo() != null) {
-					generar(def.getCuerpo());
-				}
-				UtGen.emitirComentario("Return implicito de funcion");
-				UtGen.emitirRM("LD", UtGen.AC1, 0, UtGen.MP, "funcion: recuperar direccion de retorno");
-				UtGen.emitirRM("LDA", UtGen.PC, 0, UtGen.AC1, "funcion: retorno");
-				UtGen.emitirComentario("=== FIN FUNCION " + def.getNombre() + " ===");
-			}
-			// Volver al sitio de llamada y emitir el salto a la función
-			UtGen.cargarRespaldo(posLlamada);
-			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicio, "call: salto a funcion " + n.getNombreFuncion());
-			// Restaurar emision al final para continuar generando el resto del programa
-			UtGen.restaurarRespaldo();
-		} else {
-			// Ya fue emitida antes: emitir solo el salto
-			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicio, "call: salto a funcion " + n.getNombreFuncion());
 		}
 		
-		// 3) Restaurar desplazamiento temporal (limpiar argumentos en el generador)
-		desplazamientoTmp += numArgs;
+		// 3) Saltar a la función
+		Integer inicio = inicioFuncion.get(n.getNombreFuncion());
+		if (inicio != null) {
+			UtGen.emitirRM_Abs("LDA", UtGen.PC, inicio, "call: salto a funcion " + n.getNombreFuncion());
+		} else {
+			UtGen.emitirComentario("ERROR: funcion no encontrada: " + n.getNombreFuncion());
+		}
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- llamada funcion");
 	}
@@ -422,13 +398,12 @@ public class Generador {
 		NodoReturn n = (NodoReturn)nodo;
 		if(UtGen.debug) UtGen.emitirComentario("-> return");
 		
-		// Evaluar expresión de retorno
+		// Evaluar expresión de retorno (el resultado queda en AC)
 		if(n.getExpresion() != null){
 			generar(n.getExpresion());
 		}
 		
-		// Recuperar direccion de retorno y saltar
-		UtGen.emitirRM("LD", UtGen.AC1, 0, UtGen.MP, "return: recuperar direccion de retorno");
+		// Saltar a la dirección de retorno que está en AC1
 		UtGen.emitirRM("LDA", UtGen.PC, 0, UtGen.AC1, "return: salto a direccion de retorno");
 		
 		if(UtGen.debug) UtGen.emitirComentario("<- return");
